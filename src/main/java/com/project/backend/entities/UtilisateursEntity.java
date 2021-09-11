@@ -13,7 +13,7 @@ public class UtilisateursEntity {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long id;
-    @Column(length = 6, unique = true)
+    @Column(length = 10, unique = true)
     private String cin;
     @Column(length = 15)
     private String nom;
@@ -27,7 +27,7 @@ public class UtilisateursEntity {
     private String ville;
     @Column(length = 10)
     private String tel;
-    @DateTimeFormat(pattern = "dd-mm-yyyy")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private Date dateNaissance;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "utilisateurs")

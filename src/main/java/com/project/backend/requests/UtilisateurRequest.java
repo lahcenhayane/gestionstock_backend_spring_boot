@@ -14,14 +14,14 @@ public class UtilisateurRequest {
     private String password;
     private String ville;
     private String tel;
-    @DateTimeFormat(pattern = "dd-mm-yyyy")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private Date dateNaissance;
 
-    private List<RolesEntity> roles;
-    private List<MessagesEntity> messages;
-    private AdminsEntity admin;
-    private ClientsEntity clients;
-    private EmployesEntity employes;
+    private List<RoleRequest> roles;
+//    private List<MessagesEntity> messages;
+    private AdminRequest admin;
+//    private ClientsEntity clients;
+//    private EmployesEntity employes;
 
 
     public String getCin() {
@@ -88,43 +88,19 @@ public class UtilisateurRequest {
         this.dateNaissance = dateNaissance;
     }
 
-    public List<RolesEntity> getRoles() {
+    public List<RoleRequest> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RolesEntity> roles) {
+    public void setRoles(List<RoleRequest> roles) {
         this.roles = roles;
     }
 
-    public List<MessagesEntity> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<MessagesEntity> messages) {
-        this.messages = messages;
-    }
-
-    public AdminsEntity getAdmin() {
+    public AdminRequest getAdmin() {
         return admin;
     }
 
-    public void setAdmin(AdminsEntity admin) {
+    public void setAdmin(AdminRequest admin) {
         this.admin = admin;
-    }
-
-    public ClientsEntity getClients() {
-        return clients;
-    }
-
-    public void setClients(ClientsEntity clients) {
-        this.clients = clients;
-    }
-
-    public EmployesEntity getEmployes() {
-        return employes;
-    }
-
-    public void setEmployes(EmployesEntity employes) {
-        this.employes = employes;
     }
 }
