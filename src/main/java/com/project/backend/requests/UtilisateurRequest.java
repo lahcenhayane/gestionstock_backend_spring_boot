@@ -24,8 +24,6 @@ public class UtilisateurRequest {
     private EmployesEntity employes;
 
 
-    
-
     public String getCin() {
         return cin;
     }
