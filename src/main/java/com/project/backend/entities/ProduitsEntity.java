@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "produits")
 public class ProduitsEntity {
@@ -17,9 +19,9 @@ public class ProduitsEntity {
     private String image;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "produits")
-    private List<CategoriesEntity> categories;
+    private Set<CategoriesEntity> categories = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "produits")
-    private List<CommandesEntity> commandes;
+    private Set<CommandesEntity> commandes = new HashSet<>();
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -36,7 +38,7 @@ public class ProduitsEntity {
         this.dateModification = null;
     }
 
-    public ProduitsEntity(String nom, Double prix, int quantity, String image, List<CategoriesEntity> categories) {
+    public ProduitsEntity(String nom, Double prix, int quantity, String image, Set<CategoriesEntity> categories) {
         this();
         this.nom = nom;
         this.prix = prix;
@@ -81,19 +83,19 @@ public class ProduitsEntity {
         this.image = image;
     }
 
-    public List<CategoriesEntity> getCategories() {
+    public Set<CategoriesEntity> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<CategoriesEntity> categories) {
+    public void setCategories(Set<CategoriesEntity> categories) {
         this.categories = categories;
     }
 
-    public List<CommandesEntity> getCommandes() {
+    public Set<CommandesEntity> getCommandes() {
         return commandes;
     }
 
-    public void setCommandes(List<CommandesEntity> commandes) {
+    public void setCommandes(Set<CommandesEntity> commandes) {
         this.commandes = commandes;
     }
 

@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "utilisateurs")
 public class UtilisateursEntity {
@@ -29,7 +31,7 @@ public class UtilisateursEntity {
     private Date dateNaissance;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "utilisateurs")
-    private List<RolesEntity> roles;
+    private Set<RolesEntity> roles = new HashSet<>();
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     private List<MessagesEntity> messages;
     @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL)
@@ -53,7 +55,8 @@ public class UtilisateursEntity {
         this.dateCreation = new Date();
         this.dateModification = null;
     }
-    public UtilisateursEntity(String cin, String nom, String prenom, String email, String password, String ville, String tel, Date dateNaissance, List<RolesEntity> roles) {
+
+    public UtilisateursEntity(String cin, String nom, String prenom, String email, String password, String ville, String tel, Date dateNaissance, Set<RolesEntity> roles) {
         this();
         this.cin = cin;
         this.nom = nom;
@@ -134,11 +137,11 @@ public class UtilisateursEntity {
         this.dateNaissance = dateNaissance;
     }
 
-    public List<RolesEntity> getRoles() {
+    public Set<RolesEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RolesEntity> roles) {
+    public void setRoles(Set<RolesEntity> roles) {
         this.roles = roles;
     }
 

@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "commandes")
 public class CommandesEntity {
@@ -28,7 +30,7 @@ public class CommandesEntity {
                 joinColumns = { @JoinColumn(name = "commandes_id") },
                 inverseJoinColumns = { @JoinColumn(name = "produits_id") }
     )
-    private List<ProduitsEntity> produits;
+    private Set<ProduitsEntity> produits = new HashSet<>();
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -45,7 +47,7 @@ public class CommandesEntity {
         this.dateModification = null;
     }
 
-    public CommandesEntity(Double prixTotal, EmployesEntity employes, ClientsEntity clients, List<ProduitsEntity> produits) {
+    public CommandesEntity(Double prixTotal, EmployesEntity employes, ClientsEntity clients, Set<ProduitsEntity> produits) {
         this();
         this.prixTotal = prixTotal;
         this.employes = employes;
@@ -53,7 +55,7 @@ public class CommandesEntity {
         this.produits = produits;
     }
 
-    public CommandesEntity(Double prixTotal, EmployesEntity employes, AdminsEntity admins, List<ProduitsEntity> produits) {
+    public CommandesEntity(Double prixTotal, EmployesEntity employes, AdminsEntity admins, Set<ProduitsEntity> produits) {
         this();
         this.prixTotal = prixTotal;
         this.employes = employes;
@@ -97,11 +99,11 @@ public class CommandesEntity {
         this.admins = admins;
     }
 
-    public List<ProduitsEntity> getProduits() {
+    public Set<ProduitsEntity> getProduits() {
         return produits;
     }
 
-    public void setProduits(List<ProduitsEntity> produits) {
+    public void setProduits(Set<ProduitsEntity> produits) {
         this.produits = produits;
     }
 

@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "categories")
 public class CategoriesEntity {
@@ -19,7 +21,7 @@ public class CategoriesEntity {
                 joinColumns = { @JoinColumn(name = "categories_id") },
                 inverseJoinColumns = { @JoinColumn(name = "produits_id") }
     )
-    private List<ProduitsEntity> produits;
+    private Set<ProduitsEntity> produits = new HashSet<>();
 
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateCreation;
@@ -36,6 +38,7 @@ public class CategoriesEntity {
         this.labelle = labelle;
     }
 
+
     public long getId() {
         return id;
     }
@@ -48,11 +51,11 @@ public class CategoriesEntity {
         this.labelle = labelle;
     }
 
-    public List<ProduitsEntity> getProduits() {
+    public Set<ProduitsEntity> getProduits() {
         return produits;
     }
 
-    public void setProduits(List<ProduitsEntity> produits) {
+    public void setProduits(Set<ProduitsEntity> produits) {
         this.produits = produits;
     }
 

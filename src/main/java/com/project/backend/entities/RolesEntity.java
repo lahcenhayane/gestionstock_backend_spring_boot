@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "roles")
 public class RolesEntity {
@@ -18,7 +20,7 @@ public class RolesEntity {
             joinColumns ={@JoinColumn(name = "roles_id")},
             inverseJoinColumns = {@JoinColumn(name = "utilisateurs_id")}
     )
-    private List<UtilisateursEntity> utilisateurs;
+    private Set<UtilisateursEntity> utilisateurs = new HashSet<>();
 
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateCreation;
@@ -35,7 +37,7 @@ public class RolesEntity {
         this.libelle = libelle;
     }
 
-    public RolesEntity(String libelle, List<UtilisateursEntity> utilisateurs) {
+    public RolesEntity(String libelle, Set<UtilisateursEntity> utilisateurs) {
         this();
         this.libelle = libelle;
         this.utilisateurs = utilisateurs;
@@ -53,11 +55,11 @@ public class RolesEntity {
         this.libelle = libelle;
     }
 
-    public List<UtilisateursEntity> getUtilisateurs() {
+    public Set<UtilisateursEntity> getUtilisateurs() {
         return utilisateurs;
     }
 
-    public void setUtilisateurs(List<UtilisateursEntity> utilisateurs) {
+    public void setUtilisateurs(Set<UtilisateursEntity> utilisateurs) {
         this.utilisateurs = utilisateurs;
     }
 
