@@ -49,11 +49,8 @@ public class UtilisateurService implements IUtilisateurServiceImpl {
         //Switch Password to BCryptPasswordEncoder.
         utilisateursEntity.setPassword(bCryptPasswordEncoder.encode(utilisateursEntity.getPassword()));
 
-        //Add Roles To User
-        RolesEntity role = rolesRepository.findByLibelle("Admin");
-//        Set<RolesEntity> roles = new HashSet<>();
-//        roles.add(role);
-        utilisateursEntity.getRoles().add(role);
+        //Add User To Roles.
+
 
         //Add User to Admin.
 //        utilisateursEntity.setAdmin(utilisateursEntity.getAdmin());

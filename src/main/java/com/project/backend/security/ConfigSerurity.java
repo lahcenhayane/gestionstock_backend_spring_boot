@@ -1,5 +1,6 @@
 package com.project.backend.security;
 
+import com.project.backend.repositories.UtilisateurRepository;
 import com.project.backend.services.impl.IUtilisateurServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class ConfigSerurity extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
     @Autowired
     IUtilisateurServiceImpl IutilisateurService;
     @Autowired
@@ -30,9 +33,10 @@ public class ConfigSerurity extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+            .addFilter(new JwtAuthenticationFilter(authenticationManager(), utilisateurRepository))
             .addFilter(new JwtAuthorizationFilter(authenticationManager()))
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

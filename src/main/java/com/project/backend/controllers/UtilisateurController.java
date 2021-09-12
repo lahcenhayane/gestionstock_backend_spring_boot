@@ -28,15 +28,12 @@ public class UtilisateurController {
 
     @PostMapping
     public ResponseEntity<UtilisateurRequest> createNewUser(@RequestBody UtilisateurRequest utilisateurRequest){
-        //Switch @utilisateurRequest to UtilisateursEntity.
-//        UtilisateursEntity utilisateursEntity = modelMapper.map(utilisateurRequest, UtilisateursEntity.class);
-//
-//        //Pass Parameter @utilisateursEntity to function @createNewUser and return object utilisateur.
-//        UtilisateursEntity utilisateur = utilisateurService.createNewUser(utilisateursEntity);
-//
-//        //Switch @utilisateur to UtilisateurResponse.
+        //Pass Parameter @utilisateursEntity to function @createNewUser and return object utilisateur.
+        UtilisateursEntity utilisateur = utilisateurService.createNewUser(utilisateurRequest);
+
+        //Switch @utilisateur to UtilisateurResponse.
 //        UtilisateurResponse utilisateurResponse = modelMapper.map(utilisateur, UtilisateurResponse.class);
-        return new ResponseEntity<>(utilisateurRequest ,HttpStatus.CREATED);
+        return new ResponseEntity<>(null ,HttpStatus.CREATED);
     }
 
     @PutMapping

@@ -21,7 +21,7 @@ public class UtilisateursEntity {
     private String prenom;
     @Column(length = 200, unique = true)
     private String email;
-    @Column(length = 50)
+    @Column(length = 100)
     private String password;
     @Column(length = 30)
     private String ville;
