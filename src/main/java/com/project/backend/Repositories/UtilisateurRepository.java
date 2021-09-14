@@ -22,5 +22,5 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateursEntity,
     Page<UtilisateursEntity> findBySupprimer(Date date, Pageable pageable);
 
 
-    Page<UtilisateursEntity> findByEmailOrCinContains(String s, Pageable pageable);
+    Page<UtilisateursEntity> findByEmailContaining(String s, Pageable pageable);
 }

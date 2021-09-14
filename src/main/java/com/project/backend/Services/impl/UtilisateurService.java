@@ -178,7 +178,7 @@ public class UtilisateurService implements IUtilisateurService {
     public List<UtilisateurDTO> getUserByCinOrEmail(String search, int page) {
         String s = search.trim();
         int size = 10;
-        Page<UtilisateursEntity> utilisateursEntity = utilisateurRepository.findByEmailOrCinContains(s, PageRequest.of(page, size));
+        Page<UtilisateursEntity> utilisateursEntity = utilisateurRepository.findByEmailContaining(s, PageRequest.of(page, size));
         if (utilisateursEntity.getSize() == 0) throw new UtilisateurException("User Not Found.");
         List<UtilisateurDTO> utilisateursDTO = utilisateursEntity.stream().map(user -> {
             UtilisateurDTO dto = modelMapper.map(user, UtilisateurDTO.class);

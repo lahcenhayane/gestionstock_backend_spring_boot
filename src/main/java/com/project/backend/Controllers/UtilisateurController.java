@@ -67,7 +67,7 @@ public class UtilisateurController {
      * @return listUtilisateurResponse
      */
     @GetMapping
-    public ResponseEntity<List<UtilisateurResponse>> getUsers(@RequestParam(value = "size") int size, @RequestParam(value = "page", defaultValue = "0") int page){
+    public ResponseEntity<List<UtilisateurResponse>> getUsers(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "0") int page){
         List<UtilisateurDTO> listUsersDTO = utilisateurService.getAllUser(page, size);
         List<UtilisateurResponse> listUtilisateurResponse = listUsersDTO.stream().map(user -> {
             UtilisateurResponse utilisateurResponse = modelMapper.map(user, UtilisateurResponse.class);
