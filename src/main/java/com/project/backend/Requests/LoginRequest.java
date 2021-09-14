@@ -1,6 +1,7 @@
-package com.project.backend.Dto;
+package com.project.backend.Requests;
 
-public class LoginDto {
+public class LoginRequest {
+
     private String email;
     private String password;
 

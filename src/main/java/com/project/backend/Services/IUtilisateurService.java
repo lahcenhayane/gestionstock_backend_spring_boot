@@ -1,9 +1,26 @@
 package com.project.backend.Services;
 
-import com.project.backend.Dto.UtilisateurDto;
+import com.project.backend.Dto.UtilisateurDTO;
+import com.project.backend.Requests.UtilisateurRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface IUtilisateurService extends UserDetailsService {
 
-    UtilisateurDto createNewUser(UtilisateurDto utilisateurDto);
+    UtilisateurDTO createNewUser(UtilisateurDTO utilisateurDTO);
+
+
+    List<UtilisateurDTO> getAllUser(int page, int size);
+
+    UtilisateurDTO getUser(long id);
+
+    void deleteUser(long id);
+
+    String disabledEnabledUser(long id);
+
+    UtilisateurDTO editUser(long id, UtilisateurRequest utilisateurRequest);
+
+    List<UtilisateurDTO> getUserByCinOrEmail(String search, int page);
 }

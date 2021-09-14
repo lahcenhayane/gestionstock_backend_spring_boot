@@ -1,12 +1,11 @@
 package com.project.backend.Dto;
 
-import com.project.backend.Entities.UtilisateursEntity;
-
-public class EmployeeDto {
+public class EmployeeDTO {
 
     private long id;
     private Double salaire;
-    private UtilisateursEntity utilisateur;
+    private UtilisateurDTO utilisateur;
+
 
     public long getId() {
         return id;
@@ -24,5 +23,11 @@ public class EmployeeDto {
         this.salaire = salaire;
     }
 
+    public UtilisateurDTO getUtilisateur() {
+        return utilisateur;
+    }
 
+    public void setUtilisateur(UtilisateurDTO utilisateur) {
+        this.utilisateur = utilisateur;
+    }
 }

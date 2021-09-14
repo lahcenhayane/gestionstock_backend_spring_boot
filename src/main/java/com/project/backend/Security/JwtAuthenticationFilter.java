@@ -1,17 +1,12 @@
 package com.project.backend.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.backend.Entities.UtilisateursEntity;
-import com.project.backend.Repositories.UtilisateurRepository;
-import com.project.backend.Dto.LoginDto;
-import com.sun.security.auth.UserPrincipal;
+import com.project.backend.Requests.LoginRequest;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -21,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import io.jsonwebtoken.Jwts;
@@ -37,7 +31,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            LoginDto loginDto = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
+            LoginRequest loginDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginDto.getEmail(), loginDto.getPassword(), new ArrayList<>()

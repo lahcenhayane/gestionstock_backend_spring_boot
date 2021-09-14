@@ -1,11 +1,12 @@
 package com.project.backend.Dto;
 
-import com.project.backend.Entities.UtilisateursEntity;
+import javax.persistence.Column;
 
-public class ClientDto {
+public class ClientDTO {
+
     private long id;
     private String adresse;
-    private UtilisateursEntity utilisateur;
+    private UtilisateurDTO utilisateur;
 
     public long getId() {
         return id;
@@ -23,11 +24,11 @@ public class ClientDto {
         this.adresse = adresse;
     }
 
-//    public UtilisateursEntity getUtilisateur() {
-//        return utilisateur;
-//    }
-//
-//    public void setUtilisateur(UtilisateursEntity utilisateur) {
-//        this.utilisateur = utilisateur;
-//    }
+    public UtilisateurDTO getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(UtilisateurDTO utilisateur) {
+        this.utilisateur = utilisateur;
+    }
 }

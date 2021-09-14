@@ -1,8 +1,15 @@
 package com.project.backend.Repositories;
 
 import com.project.backend.Entities.UtilisateursEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import javax.xml.crypto.Data;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface UtilisateurRepository extends JpaRepository<UtilisateursEntity, Long> {
@@ -10,4 +17,10 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateursEntity,
     UtilisateursEntity findByEmail(String email);
 
     UtilisateursEntity findByEmailAndCin(String email, String cin);
+
+
+    Page<UtilisateursEntity> findBySupprimer(Date date, Pageable pageable);
+
+
+    Page<UtilisateursEntity> findByEmailOrCinContains(String s, Pageable pageable);
 }

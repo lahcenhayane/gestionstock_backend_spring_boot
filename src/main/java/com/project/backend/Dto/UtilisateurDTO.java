@@ -1,11 +1,11 @@
 package com.project.backend.Dto;
 
 import com.project.backend.Utils.Roles;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class UtilisateurDto {
+public class UtilisateurDTO {
+
     private long id;
     private String cin;
     private String nom;
@@ -14,12 +14,13 @@ public class UtilisateurDto {
     private String password;
     private String ville;
     private String tel;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private Date dateNaissance;
     private Roles role;
-    private AdminDto admin;
-    private ClientDto client;
-    private EmployeeDto employee;
+
+    private EmployeeDTO employee;
+    private ClientDTO client;
+    private AdminDTO admin;
+
 
     public long getId() {
         return id;
@@ -101,27 +102,27 @@ public class UtilisateurDto {
         this.role = role;
     }
 
-    public AdminDto getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(AdminDto admin) {
-        this.admin = admin;
-    }
-
-    public ClientDto getClient() {
-        return client;
-    }
-
-    public void setClient(ClientDto client) {
-        this.client = client;
-    }
-
-    public EmployeeDto getEmployee() {
+    public EmployeeDTO getEmployee() {
         return employee;
     }
 
-    public void setEmployee(EmployeeDto employee) {
+    public void setEmployee(EmployeeDTO employee) {
         this.employee = employee;
+    }
+
+    public ClientDTO getClient() {
+        return client;
+    }
+
+    public void setClient(ClientDTO client) {
+        this.client = client;
+    }
+
+    public AdminDTO getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(AdminDTO admin) {
+        this.admin = admin;
     }
 }

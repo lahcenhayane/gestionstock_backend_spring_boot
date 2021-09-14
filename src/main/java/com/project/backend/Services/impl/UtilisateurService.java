@@ -1,12 +1,17 @@
 package com.project.backend.Services.impl;
 
-import com.project.backend.Dto.UtilisateurDto;
+import com.project.backend.Dto.AdminDTO;
+import com.project.backend.Dto.UtilisateurDTO;
 import com.project.backend.Entities.*;
+import com.project.backend.Exceptions.UtilisateurException;
 import com.project.backend.Repositories.UtilisateurRepository;
+import com.project.backend.Requests.UtilisateurRequest;
 import com.project.backend.Services.IUtilisateurService;
 import com.project.backend.Utils.Roles;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurService implements IUtilisateurService {
@@ -28,54 +36,154 @@ public class UtilisateurService implements IUtilisateurService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UtilisateursEntity user = utilisateurRepository.findByEmail(email);
-        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        if (user == null) throw new UsernameNotFoundException("This User Not Found.");
+
+        Boolean enableUser = true;
+        if (user.getSupprimer() != null) enableUser = false;
+
+        return new User(user.getEmail(), user.getPassword(),enableUser ,true, true ,true, new ArrayList<>());
     }
 
 
     /**
-     * Create New User(Admin or Client or Employe).
-     * @param utilisateurDto
-     * @return dto
+     * Create New User With(Admin Or Client Or Employee).
+     * @param utilisateurDTO
+     * @return userDTO
      */
     @Override
-    public UtilisateurDto createNewUser(UtilisateurDto utilisateurDto) {
-        //Check if User Exist or not.
-        UtilisateursEntity user = utilisateurRepository.findByEmailAndCin(utilisateurDto.getEmail(), utilisateurDto.getCin());
-        if (user != null) throw new RuntimeException("This Email or CIN Already Exist.");
+    public UtilisateurDTO createNewUser(UtilisateurDTO utilisateurDTO) {
+        UtilisateursEntity utilisateursEntity = utilisateurRepository.findByEmailAndCin(utilisateurDTO.getEmail(), utilisateurDTO.getCin());//Check User is exist or not.
+        if (utilisateursEntity != null) throw new UtilisateurException("User Already Exist.");//Exception User "User Already exist".
 
-        //Map UtilisateurDto (utilisateurDto) to UtilisateursEntity (user).
-        UtilisateursEntity utilisateursEntity = modelMapper.map(utilisateurDto, UtilisateursEntity.class);
-        //Bcrypt Password.
-        utilisateursEntity.setPassword(bCryptPasswordEncoder.encode(utilisateurDto.getPassword()));
-        //Add Admin to User if role equals Admin.
-        if (utilisateursEntity.getRole() == Roles.Admin){
-            AdminsEntity adminsEntity = new AdminsEntity();
-            adminsEntity.setUtilisateur(utilisateursEntity);
-            utilisateursEntity.setAdmin(adminsEntity);
-        }
-        //Add Client to User if role equals Client.
-        if (utilisateursEntity.getRole() == Roles.Client){
-            ClientsEntity clientsEntity = new ClientsEntity();
-            clientsEntity.setAdresse(utilisateurDto.getClient().getAdresse());
-            clientsEntity.setUtilisateur(utilisateursEntity);
-            utilisateursEntity.setClient(clientsEntity);
-        }
-        //Add Employe to User if role equals Employe.
-        if (utilisateursEntity.getRole() == Roles.Employee){
-            EmployeesEntity employeesEntity = new EmployeesEntity();
-            employeesEntity.setSalaire(utilisateurDto.getEmployee().getSalaire());
-            employeesEntity.setUtilisateur(utilisateursEntity);
-            utilisateursEntity.setEmployee(employeesEntity);
+        if (utilisateurDTO.getRole() == Roles.Employee)//Check If Role Equals Employee.
+            utilisateurDTO.getEmployee().setUtilisateur(utilisateurDTO);//Add ID User To Employee.
+        if (utilisateurDTO.getRole() == Roles.Client)//Check If Role Equals Client.
+            utilisateurDTO.getClient().setUtilisateur(utilisateurDTO);//Add ID User To Client.
+        if (utilisateurDTO.getRole() == Roles.Admin){//Check If Role Equals Admin.
+            AdminDTO adminDTO = new AdminDTO();
+            utilisateurDTO.setAdmin(adminDTO);//Add ID Admin to User.
+            adminDTO.setUtilisateur(utilisateurDTO);//Add ID User to Admin.
         }
 
-        //Save User in database.
-        UtilisateursEntity saveUser = utilisateurRepository.save(utilisateursEntity);
+        UtilisateursEntity userEntity = modelMapper.map(utilisateurDTO, UtilisateursEntity.class);//Map UserDTO To UserEntity.
+        userEntity.setPassword(bCryptPasswordEncoder.encode(utilisateurDTO.getPassword()));//BCrypt Password.
 
-        //Map UtilisateursEntity (saveUser) to UtilisateurDto (dto).
-        UtilisateurDto dto = modelMapper.map(saveUser, UtilisateurDto.class);
-        //Empty password
-        dto.setPassword("");
-        return dto;
+        UtilisateursEntity saveUser = utilisateurRepository.save(userEntity);//Save User In Data Base.
+
+        UtilisateurDTO userDTO = modelMapper.map(saveUser, UtilisateurDTO.class);//Map UserEntity To UserDTO.
+        return userDTO;//Return UserDTO.
     }
 
+
+    /**
+     * Get All Users
+     * @param page
+     * @param size
+     * @return listUserDTO
+     */
+    @Override
+    public List<UtilisateurDTO> getAllUser(int page, int size) {
+        if (page > 0) page -= 1;
+        Page<UtilisateursEntity> listUsers = utilisateurRepository.findBySupprimer(null, PageRequest.of(page, size));
+        List<UtilisateurDTO> listUserDTO = listUsers.stream().map(user -> {
+            UtilisateurDTO utilisateurDTO = modelMapper.map(user, UtilisateurDTO.class);
+            return utilisateurDTO;
+        }).collect(Collectors.toList());
+        return listUserDTO;
+    }
+
+
+    /**
+     * Get User By ID.
+     * @param id
+     * @return utilisateurDTO
+     */
+    @Override
+    public UtilisateurDTO getUser(long id) {
+        UtilisateursEntity userEntity = utilisateurRepository.findById(id).get();
+        if (userEntity == null) throw new UtilisateurException("User Not Found.");
+        UtilisateurDTO utilisateurDTO = modelMapper.map(userEntity, UtilisateurDTO.class);
+        return utilisateurDTO;
+    }
+
+
+    /**
+     * Delete User By ID.
+     * @param id
+     */
+    @Override
+    public void deleteUser(long id) {
+        UtilisateursEntity user = utilisateurRepository.findById(id).get();
+        if (user == null) throw new UtilisateurException("User Not Found.");
+        utilisateurRepository.delete(user);
+    }
+
+
+    /**
+     * Disabled User By ID.
+     * @param id
+     * @return msg
+     */
+    @Override
+    public String disabledEnabledUser(long id) {
+        UtilisateursEntity utilisateursEntity = utilisateurRepository.findById(id).get();
+        if (utilisateursEntity == null) throw new UtilisateurException("User "+id+" Not Found.");
+        String msg;
+        if (utilisateursEntity.getSupprimer() == null){
+            utilisateursEntity.setSupprimer(new Date());
+            msg = "Disabled User";
+        }else{
+            utilisateursEntity.setSupprimer(null);
+            msg = "Enabled User";
+        }
+        utilisateurRepository.save(utilisateursEntity);
+        return msg;
+    }
+
+
+    /**
+     * Update User
+     * @param id
+     * @param utilisateurRequest
+     * @return utilisateurDTO
+     */
+    @Override
+    public UtilisateurDTO editUser(long id, UtilisateurRequest utilisateurRequest) {
+        UtilisateursEntity utilisateursEntity = utilisateurRepository.findById(id).get();
+        if (utilisateursEntity == null) throw new UtilisateurException("User "+id+" Not Found");
+
+        if (utilisateursEntity.getRole() == Roles.Admin){
+            utilisateursEntity.getAdmin().setDateModification(new Date());
+        }
+        if (utilisateursEntity.getRole() == Roles.Client){
+            utilisateursEntity.getClient().setAdresse(utilisateurRequest.getClient().getAdresse());
+            utilisateursEntity.getClient().setDateModification(new Date());
+        }
+        if (utilisateursEntity.getRole() == Roles.Employee){
+            utilisateursEntity.getEmployee().setSalaire(utilisateurRequest.getEmployee().getSalaire());
+            utilisateursEntity.getEmployee().setDateModification(new Date());
+        }
+        utilisateursEntity.setDateModification(new Date());
+        utilisateursEntity = modelMapper.map(utilisateurRequest, UtilisateursEntity.class);
+
+        UtilisateursEntity utilisateurs = utilisateurRepository.save(utilisateursEntity);
+
+        UtilisateurDTO utilisateurDTO = modelMapper.map(utilisateurs, UtilisateurDTO.class);
+        return utilisateurDTO;
+    }
+
+
+
+    @Override
+    public List<UtilisateurDTO> getUserByCinOrEmail(String search, int page) {
+        String s = search.trim();
+        int size = 10;
+        Page<UtilisateursEntity> utilisateursEntity = utilisateurRepository.findByEmailOrCinContains(s, PageRequest.of(page, size));
+        if (utilisateursEntity.getSize() == 0) throw new UtilisateurException("User Not Found.");
+        List<UtilisateurDTO> utilisateursDTO = utilisateursEntity.stream().map(user -> {
+            UtilisateurDTO dto = modelMapper.map(user, UtilisateurDTO.class);
+            return dto;
+        }).collect(Collectors.toList());
+        return utilisateursDTO;
+    }
 }
