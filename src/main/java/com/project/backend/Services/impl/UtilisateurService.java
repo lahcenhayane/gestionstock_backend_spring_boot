@@ -2,6 +2,9 @@ package com.project.backend.Services.impl;
 
 import com.project.backend.Dto.AdminDTO;
 import com.project.backend.Dto.UtilisateurDTO;
+import com.project.backend.Email.Email;
+import com.project.backend.Email.Services.ISendEmailService;
+import com.project.backend.Email.Services.Impl.SendEmailServiceImpl;
 import com.project.backend.Entities.*;
 import com.project.backend.Exceptions.UtilisateurException;
 import com.project.backend.Repositories.UtilisateurRepository;
@@ -12,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,7 +35,8 @@ public class UtilisateurService implements IUtilisateurService {
     private UtilisateurRepository utilisateurRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    @Autowired
+    private ISendEmailService sendEmailService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -71,6 +76,15 @@ public class UtilisateurService implements IUtilisateurService {
         UtilisateursEntity saveUser = utilisateurRepository.save(userEntity);//Save User In Data Base.
 
         UtilisateurDTO userDTO = modelMapper.map(saveUser, UtilisateurDTO.class);//Map UserEntity To UserDTO.
+
+        // TODO: Send Username and Password.
+        if (saveUser != null){
+            String SubjectMail = "Your Account Username And Password.";
+            String TextMail = "Username : "+saveUser.getEmail()+", Paasword :"+utilisateurDTO.getPassword();
+            Email email = new Email(saveUser.getEmail(), SubjectMail,TextMail);
+
+            sendEmailService.SendMailUsernamePassword(email);
+        }
         return userDTO;//Return UserDTO.
     }
 
@@ -120,7 +134,7 @@ public class UtilisateurService implements IUtilisateurService {
 
 
     /**
-     * Disabled User By ID.
+     * Disabled/Enable User By ID.
      * @param id
      * @return msg
      */
@@ -144,42 +158,64 @@ public class UtilisateurService implements IUtilisateurService {
     /**
      * Update User
      * @param id
-     * @param utilisateurRequest
+     * @param utilisateurDTO
      * @return utilisateurDTO
      */
     @Override
-    public UtilisateurDTO editUser(long id, UtilisateurRequest utilisateurRequest) {
+    public UtilisateurDTO editUser(long id, UtilisateurDTO utilisateurDTO) {
         UtilisateursEntity utilisateursEntity = utilisateurRepository.findById(id).get();
         if (utilisateursEntity == null) throw new UtilisateurException("User "+id+" Not Found");
 
+        utilisateursEntity.setCin(utilisateurDTO.getCin());
+        utilisateursEntity.setNom(utilisateurDTO.getNom());
+        utilisateursEntity.setPrenom(utilisateurDTO.getPrenom());
+        utilisateursEntity.setEmail(utilisateurDTO.getEmail());
+        utilisateursEntity.setPassword(bCryptPasswordEncoder.encode(utilisateurDTO.getPassword()));
+        utilisateursEntity.setVille(utilisateurDTO.getVille());
+        utilisateursEntity.setTel(utilisateurDTO.getTel());
+        utilisateursEntity.setDateNaissance(utilisateurDTO.getDateNaissance());
+        utilisateursEntity.setRole(utilisateurDTO.getRole());
+
+
         if (utilisateursEntity.getRole() == Roles.Admin){
             utilisateursEntity.getAdmin().setDateModification(new Date());
+            utilisateursEntity.getAdmin().setUtilisateur(utilisateursEntity);
         }
         if (utilisateursEntity.getRole() == Roles.Client){
-            utilisateursEntity.getClient().setAdresse(utilisateurRequest.getClient().getAdresse());
+            utilisateursEntity.getClient().setAdresse(utilisateurDTO.getClient().getAdresse());
             utilisateursEntity.getClient().setDateModification(new Date());
+            utilisateursEntity.getClient().setUtilisateur(utilisateursEntity);
         }
         if (utilisateursEntity.getRole() == Roles.Employee){
-            utilisateursEntity.getEmployee().setSalaire(utilisateurRequest.getEmployee().getSalaire());
+            utilisateursEntity.getEmployee().setSalaire(utilisateurDTO.getEmployee().getSalaire());
             utilisateursEntity.getEmployee().setDateModification(new Date());
+            utilisateursEntity.getEmployee().setUtilisateur(utilisateursEntity);
         }
         utilisateursEntity.setDateModification(new Date());
-        utilisateursEntity = modelMapper.map(utilisateurRequest, UtilisateursEntity.class);
+        utilisateursEntity.setPassword(bCryptPasswordEncoder.encode(utilisateurDTO.getPassword()));
 
         UtilisateursEntity utilisateurs = utilisateurRepository.save(utilisateursEntity);
 
-        UtilisateurDTO utilisateurDTO = modelMapper.map(utilisateurs, UtilisateurDTO.class);
-        return utilisateurDTO;
+        UtilisateurDTO userDTO = modelMapper.map(utilisateurs, UtilisateurDTO.class);
+        return userDTO;
     }
 
 
-
+    /**
+     * Get Users By Email
+     * @param search
+     * @param page
+     * @return utilisateursDTO
+     */
     @Override
-    public List<UtilisateurDTO> getUserByCinOrEmail(String search, int page) {
+    public List<UtilisateurDTO> getUserByEmail(String search, int page) {
         String s = search.trim();
+        if (s == null) throw new UtilisateurException("Input Is Empty.");
         int size = 10;
-        Page<UtilisateursEntity> utilisateursEntity = utilisateurRepository.findByEmailContaining(s, PageRequest.of(page, size));
+
+        Page<UtilisateursEntity> utilisateursEntity = utilisateurRepository.findByEmailContains(s, PageRequest.of(page, size));
         if (utilisateursEntity.getSize() == 0) throw new UtilisateurException("User Not Found.");
+
         List<UtilisateurDTO> utilisateursDTO = utilisateursEntity.stream().map(user -> {
             UtilisateurDTO dto = modelMapper.map(user, UtilisateurDTO.class);
             return dto;

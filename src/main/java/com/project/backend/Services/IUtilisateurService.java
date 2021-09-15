@@ -20,7 +20,7 @@ public interface IUtilisateurService extends UserDetailsService {
 
     String disabledEnabledUser(long id);
 
-    UtilisateurDTO editUser(long id, UtilisateurRequest utilisateurRequest);
+    UtilisateurDTO editUser(long id, UtilisateurDTO utilisateurDTO);
 
-    List<UtilisateurDTO> getUserByCinOrEmail(String search, int page);
+    List<UtilisateurDTO> getUserByEmail(String search, int page);
 }

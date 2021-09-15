@@ -34,9 +34,16 @@ public class UtilisateurController {
     private IUtilisateurService utilisateurService;
 
 
-    @GetMapping(path = "/{search}")
-    public ResponseEntity<List<UtilisateurResponse>> getUserByCinOrEmail(@PathVariable String search, @RequestParam(value = "page") int page){
-        List<UtilisateurDTO> utilisateurDTO = utilisateurService.getUserByCinOrEmail(search, page);
+    /**
+     * Get Users By Email.
+     * @param search
+     * @param page
+     * @return
+     */
+    @GetMapping(path = "/search")
+    public ResponseEntity<List<UtilisateurResponse>> getUserByEmail(@RequestParam(value = "search") String search,
+                                                                    @RequestParam(value = "page") int page){
+        List<UtilisateurDTO> utilisateurDTO = utilisateurService.getUserByEmail(search, page);
 
         List<UtilisateurResponse> listUsers =utilisateurDTO
                 .stream()
@@ -123,10 +130,11 @@ public class UtilisateurController {
      * @return
      */
     @PutMapping(path = "/{id}")
-    public ResponseEntity<UtilisateursEntity> editUser(@PathVariable long id, @RequestBody UtilisateurRequest utilisateurRequest){
-        UtilisateurDTO utilisateurDTO = utilisateurService.editUser(id, utilisateurRequest);
-        UtilisateursEntity utilisateursEntity = modelMapper.map(utilisateurDTO, UtilisateursEntity.class);
-        return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+    public ResponseEntity<UtilisateurResponse> editUser(@PathVariable long id, @RequestBody UtilisateurRequest utilisateurRequest){
+        UtilisateurDTO userDTO = modelMapper.map(utilisateurRequest, UtilisateurDTO.class);
+        UtilisateurDTO utilisateurDTO = utilisateurService.editUser(id, userDTO);
+        UtilisateurResponse utilisateurResponse = modelMapper.map(utilisateurDTO, UtilisateurResponse.class);
+        return new ResponseEntity<>(utilisateurResponse, HttpStatus.ACCEPTED);
     }
 
 }
