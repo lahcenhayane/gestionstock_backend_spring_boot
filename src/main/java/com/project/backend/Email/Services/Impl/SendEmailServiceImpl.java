@@ -14,12 +14,12 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class SendEmailServiceImpl implements ISendEmailService {
 
-    private String myEmail = "lahcenhayane@gmail.com";
+    private final String myEmail = "lahcenhayane@gmail.com";
 
     @Autowired
     private JavaMailSender mailSender;
 
-//    @Async
+
     @Override
     public void SendMailUsernamePassword(Email email){
         try {

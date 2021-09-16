@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String TOKEN = Jwts.builder()
                             .setSubject(email)
-                            .setExpiration(new Date(System.currentTimeMillis() + JwtPropertiesConstant.DATE_EXPIRATION_TOEKN))
+                            .setExpiration(new Date(System.currentTimeMillis() + JwtPropertiesConstant.EXPIRATION_DATE_TOEKN))
                             .signWith(SignatureAlgorithm.HS512, JwtPropertiesConstant.SECRET_TOKEN)
                             .compact();
         response.addHeader(JwtPropertiesConstant.HEADER_TOKEN, JwtPropertiesConstant.PREFIX_TOKEN+TOKEN);

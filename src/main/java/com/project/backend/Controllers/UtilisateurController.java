@@ -74,7 +74,8 @@ public class UtilisateurController {
      * @return listUtilisateurResponse
      */
     @GetMapping
-    public ResponseEntity<List<UtilisateurResponse>> getUsers(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "0") int page){
+    public ResponseEntity<List<UtilisateurResponse>> getUsers(@RequestParam(value = "size", defaultValue = "10") int size,
+                                                              @RequestParam(value = "page", defaultValue = "0") int page){
         List<UtilisateurDTO> listUsersDTO = utilisateurService.getAllUser(page, size);
         List<UtilisateurResponse> listUtilisateurResponse = listUsersDTO.stream().map(user -> {
             UtilisateurResponse utilisateurResponse = modelMapper.map(user, UtilisateurResponse.class);
@@ -130,7 +131,8 @@ public class UtilisateurController {
      * @return
      */
     @PutMapping(path = "/{id}")
-    public ResponseEntity<UtilisateurResponse> editUser(@PathVariable long id, @RequestBody UtilisateurRequest utilisateurRequest){
+    public ResponseEntity<UtilisateurResponse> editUser(@PathVariable long id,
+                                                        @RequestBody UtilisateurRequest utilisateurRequest){
         UtilisateurDTO userDTO = modelMapper.map(utilisateurRequest, UtilisateurDTO.class);
         UtilisateurDTO utilisateurDTO = utilisateurService.editUser(id, userDTO);
         UtilisateurResponse utilisateurResponse = modelMapper.map(utilisateurDTO, UtilisateurResponse.class);
