@@ -8,6 +8,7 @@ public class MessageResponse {
 
     private long id;
     private String message;
+    private String titre;
     private String email;
     private Boolean lire;
     private UtilisateurDTO utilisateur;
@@ -29,6 +30,14 @@ public class MessageResponse {
         this.message = message;
     }
 
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -45,13 +54,13 @@ public class MessageResponse {
         this.lire = lire;
     }
 
-    public UtilisateurDTO getUtilisateur() {
-        return utilisateur;
-    }
-
-    public void setUtilisateur(UtilisateurDTO utilisateur) {
-        this.utilisateur = utilisateur;
-    }
+//    public UtilisateurDTO getUtilisateur() {
+//        return utilisateur;
+//    }
+//
+//    public void setUtilisateur(UtilisateurDTO utilisateur) {
+//        this.utilisateur = utilisateur;
+//    }
 
     public Date getDateCreation() {
         return dateCreation;

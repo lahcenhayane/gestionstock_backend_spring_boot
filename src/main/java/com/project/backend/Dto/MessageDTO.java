@@ -6,6 +6,7 @@ public class MessageDTO {
 
     private long id;
     private String message;
+    private String titre;
     private String email;
     private Boolean lire;
     private UtilisateurDTO utilisateur;
@@ -26,6 +27,14 @@ public class MessageDTO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
     }
 
     public String getEmail() {

@@ -2,6 +2,7 @@ package com.project.backend.Requests;
 
 public class MessageRequest {
 
+    private String titre;
     private String message;
     private String email;
 
@@ -19,5 +20,13 @@ public class MessageRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
     }
 }

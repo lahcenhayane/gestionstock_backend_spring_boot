@@ -1,6 +1,5 @@
 package com.project.backend.Security;
 
-import com.project.backend.Repositories.UtilisateurRepository;
 import com.project.backend.Services.IUtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -15,13 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class ConfigSerurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    IUtilisateurService IutilisateurService;
+    IUtilisateurService utilisateurService;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(IutilisateurService).passwordEncoder(bCryptPasswordEncoder);
+        auth.userDetailsService(utilisateurService).passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Override
@@ -33,7 +32,7 @@ public class ConfigSerurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+            .addFilter(new JwtAuthenticationFilter(authenticationManager(), utilisateurService))
             .addFilter(new JwtAuthorizationFilter(authenticationManager()))
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

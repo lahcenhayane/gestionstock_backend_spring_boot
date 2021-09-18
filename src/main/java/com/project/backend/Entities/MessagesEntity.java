@@ -11,6 +11,7 @@ public class MessagesEntity {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long id;
     private String message;
+    private String titre;
     private String email;
 
     @ManyToOne
@@ -26,10 +27,11 @@ public class MessagesEntity {
         this.lire = false;
     }
 
-    public MessagesEntity(String message, String email, UtilisateursEntity utilisateur) {
+    public MessagesEntity(String message, String email, String titre,UtilisateursEntity utilisateur) {
         this();
         this.message = message;
         this.email = email;
+        this.titre = titre;
         this.utilisateur = utilisateur;
     }
 
@@ -43,6 +45,14 @@ public class MessagesEntity {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
     }
 
     public String getEmail() {

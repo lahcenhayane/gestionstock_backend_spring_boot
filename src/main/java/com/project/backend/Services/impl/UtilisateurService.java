@@ -222,4 +222,11 @@ public class UtilisateurService implements IUtilisateurService {
         }).collect(Collectors.toList());
         return utilisateursDTO;
     }
+
+    @Override
+    public UtilisateurDTO getUserEmail(String email) {
+        UtilisateursEntity utilisateur = utilisateurRepository.findByEmail(email);
+        if (utilisateur == null) throw new UtilisateurException("User Not Found.");
+        return modelMapper.map(utilisateur, UtilisateurDTO.class);
+    }
 }
