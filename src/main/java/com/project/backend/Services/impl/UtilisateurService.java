@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class UtilisateurService implements IUtilisateurService {
      * @param utilisateurDTO
      * @return userDTO
      */
+    @Transactional
     @Override
     public UtilisateurDTO createNewUser(UtilisateurDTO utilisateurDTO) {
         UtilisateursEntity utilisateursEntity = utilisateurRepository.findByEmailAndCin(utilisateurDTO.getEmail(), utilisateurDTO.getCin());//Check User is exist or not.

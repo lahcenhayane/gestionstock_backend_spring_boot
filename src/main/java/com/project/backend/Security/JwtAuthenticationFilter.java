@@ -52,17 +52,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         String email = ((User) authResult.getPrincipal()).getUsername();
-        UtilisateurDTO userDTO = utilisateurService.getUserEmail(email);
-        String TOKEN = Jwts.builder()
-                            .setSubject(email)
-                            .claim("id", userDTO.getId())
-                            .claim("role", userDTO.getRole())
-                            .setExpiration(new Date(System.currentTimeMillis() + JwtPropertiesConstant.EXPIRATION_DATE_TOKEN))
-                            .signWith(SignatureAlgorithm.HS512, JwtPropertiesConstant.SECRET_TOKEN)
-                            .compact();
-
-
         long id = 0;
+        UtilisateurDTO userDTO = utilisateurService.getUserEmail(email);
+
         if (userDTO.getRole() == Roles.Admin){
             id = userDTO.getAdmin().getId();
         }
@@ -72,11 +64,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         if (userDTO.getRole() == Roles.Employee) {
             id = userDTO.getEmployee().getId();
         }
-        
+        String username = userDTO.getNom()+" "+userDTO.getPrenom();
+        String TOKEN = Jwts.builder()
+                .setSubject(email)
+                .claim("user_id", userDTO.getId())
+                .claim("role", userDTO.getRole())
+                .claim("username",username )
+                .claim("id", id)
+                .setExpiration(new Date(System.currentTimeMillis() + JwtPropertiesConstant.EXPIRATION_DATE_TOKEN))
+                .signWith(SignatureAlgorithm.HS512, JwtPropertiesConstant.SECRET_TOKEN)
+                .compact();
+
+
         //Creating the ObjectMapper object
         ObjectMapper mapper = new ObjectMapper();
         //Converting the Object to JSONString
-        String jsonString = mapper.writeValueAsString(new Token_JWT(TOKEN, userDTO.getId(), id, userDTO.getRole()));
+        String jsonString = mapper.writeValueAsString(new Token_JWT(TOKEN, username, userDTO.getId(), id, userDTO.getRole()));
         response.getWriter().write(jsonString);
     }
 }
