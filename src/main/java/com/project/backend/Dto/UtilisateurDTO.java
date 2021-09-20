@@ -16,6 +16,7 @@ public class UtilisateurDTO {
     private String tel;
     private Date dateNaissance;
     private Roles role;
+    private Date supprimer;
 
     private EmployeeDTO employee;
     private ClientDTO client;
@@ -124,5 +125,13 @@ public class UtilisateurDTO {
 
     public void setAdmin(AdminDTO admin) {
         this.admin = admin;
+    }
+
+    public Date getSupprimer() {
+        return supprimer;
+    }
+
+    public void setSupprimer(Date supprimer) {
+        this.supprimer = supprimer;
     }
 }

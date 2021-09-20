@@ -1,6 +1,7 @@
 package com.project.backend.Repositories;
 
 import com.project.backend.Entities.UtilisateursEntity;
+import com.project.backend.Utils.Roles;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,7 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateursEntity,
 
 
     Page<UtilisateursEntity> findByEmailContains(String s, Pageable pageable);
+
+
+    Page<UtilisateursEntity> findByRole(Pageable pageable, Roles role);
 }

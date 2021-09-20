@@ -3,7 +3,7 @@ package com.project.backend.Responses;
 public class AdminResponse {
 
     private long id;
-    private UtilisateurResponse utilisateur;
+//    private UtilisateurResponse utilisateur;
 
     public long getId() {
         return id;

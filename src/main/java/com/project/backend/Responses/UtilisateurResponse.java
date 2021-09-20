@@ -15,6 +15,7 @@ public class UtilisateurResponse {
     private String tel;
     private Date dateNaissance;
     private Roles role;
+    private Date supprimer;
 
     private EmployeeResponse employee;
     private AdminResponse admin;
@@ -115,5 +116,13 @@ public class UtilisateurResponse {
 
     public void setClient(ClientResponse client) {
         this.client = client;
+    }
+
+    public Date getSupprimer() {
+        return supprimer;
+    }
+
+    public void setSupprimer(Date supprimer) {
+        this.supprimer = supprimer;
     }
 }

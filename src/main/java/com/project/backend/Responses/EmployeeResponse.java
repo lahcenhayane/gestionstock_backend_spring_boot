@@ -4,7 +4,7 @@ public class EmployeeResponse {
 
     private long id;
     private Double salaire;
-    private UtilisateurResponse utilisateur;
+//    private UtilisateurResponse utilisateur;
 
     public long getId() {
         return id;

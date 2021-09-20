@@ -6,7 +6,7 @@ public class ClientResponse {
 
     private long id;
     private String adresse;
-    private UtilisateurDTO utilisateur;
+//    private UtilisateurDTO utilisateur;
 
     public long getId() {
         return id;
