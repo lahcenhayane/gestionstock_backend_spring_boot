@@ -12,4 +12,6 @@ public interface IUtilisateurService extends UserDetailsService {
     UtilisateurDTO getUserEmail(String email);
 
     UtilisateurDTO createNewUser(UtilisateurDTO utilisateurDTO);
+
+    UtilisateurDTO editUserById(long id, UtilisateurRequest request);
 }

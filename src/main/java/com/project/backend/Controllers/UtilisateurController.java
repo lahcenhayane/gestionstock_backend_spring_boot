@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping(value = "/api/users")
@@ -35,10 +37,18 @@ public class UtilisateurController {
      * @return utilisateurResponse
      */
     @PostMapping
-    public ResponseEntity<UtilisateurResponse> createNewUser(@RequestBody UtilisateurRequest utilisateurRequest){
+    public ResponseEntity<UtilisateurResponse> createNewUser(@RequestBody @Valid UtilisateurRequest utilisateurRequest){
         UtilisateurDTO utilisateurDTO = modelMapper.map(utilisateurRequest, UtilisateurDTO.class);
         UtilisateurDTO userDTO = utilisateurService.createNewUser(utilisateurDTO);
         UtilisateurResponse utilisateurResponse = modelMapper.map(userDTO, UtilisateurResponse.class);
         return new ResponseEntity<>(utilisateurResponse, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UtilisateurResponse> editUser(long id, @RequestBody UtilisateurRequest request){
+        UtilisateurDTO utilisateurDTO = modelMapper.map(request, UtilisateurDTO.class);
+        UtilisateurDTO userDto = utilisateurService.editUserById(id, request);
+        UtilisateurResponse response = modelMapper.map(userDto, UtilisateurResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }

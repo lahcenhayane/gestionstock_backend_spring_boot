@@ -2,7 +2,8 @@ package com.project.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
-import com.project.backend.Utils.Sexe;
+import com.project.backend.Utils.Gendre;
+import com.sun.istack.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class UtilisateursEntity {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long id;
+    
     @Column(length = 10, unique = true)
     private String cin;
     @Column(length = 15)
@@ -31,7 +33,7 @@ public class UtilisateursEntity {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date dateNaissance;
     @Enumerated(EnumType.STRING)
-    private Sexe sexe;
+    private Gendre gendre;
     @Enumerated(EnumType.STRING)
     private Roles role;
 
@@ -60,7 +62,7 @@ public class UtilisateursEntity {
         this.dateModification = null;
     }
 
-    public UtilisateursEntity(String cin, String nom, String prenom, String email, String password, String ville, String tel, Date dateNaissance, Sexe sexe, Roles role) {
+    public UtilisateursEntity(String cin, String nom, String prenom, String email, String password, String ville, String tel, Date dateNaissance, Gendre gendre, Roles role) {
         this();
         this.cin = cin;
         this.nom = nom;
@@ -70,7 +72,7 @@ public class UtilisateursEntity {
         this.ville = ville;
         this.tel = tel;
         this.dateNaissance = dateNaissance;
-        this.sexe = sexe;
+        this.gendre = gendre;
         this.role = role;
 
     }
@@ -143,12 +145,12 @@ public class UtilisateursEntity {
         this.dateNaissance = dateNaissance;
     }
 
-    public Sexe getSexe() {
-        return sexe;
+    public Gendre getGendre() {
+        return gendre;
     }
 
-    public void setSexe(Sexe sexe) {
-        this.sexe = sexe;
+    public void setGendre(Gendre gendre) {
+        this.gendre = gendre;
     }
 
     public Roles getRole() {

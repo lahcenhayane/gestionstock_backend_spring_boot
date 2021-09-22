@@ -83,6 +83,7 @@ public class UtilisateurService implements IUtilisateurService {
         }
 
         UtilisateursEntity userEntity = modelMapper.map(utilisateurDTO, UtilisateursEntity.class);//Map UserDTO To UserEntity.
+
         userEntity.setPassword(bCryptPasswordEncoder.encode(utilisateurDTO.getPassword()));//BCrypt Password.
 
         UtilisateursEntity saveUser = utilisateurRepository.save(userEntity);//Save User In Data Base.
@@ -99,4 +100,13 @@ public class UtilisateurService implements IUtilisateurService {
         }
         return userDTO;//Return UserDTO.
     }
+
+    @Override
+    public UtilisateurDTO editUserById(long id, UtilisateurRequest request) {
+        UtilisateursEntity utilisateursEntity = utilisateurRepository.findById(id).get();
+        if (utilisateursEntity == null)throw new UtilisateurException("User not found.");
+
+        return null;
+    }
+
 }

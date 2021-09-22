@@ -2,23 +2,53 @@ package com.project.backend.Requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
-import com.project.backend.Utils.Sexe;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.project.backend.Utils.Gendre;
+import org.hibernate.validator.constraints.UniqueElements;
 
+import javax.validation.constraints.*;
 import java.util.Date;
 
 public class UtilisateurRequest {
 
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    @Size(min = 6, message = "Ce champ doit avoir au mois 6 caracteres.")
     private String cin;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    @Size(min = 3, message = "Ce champ doit avoir au mois 3 caracteres.")
     private String nom;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    @Size(min = 3, message = "Ce champ doit avoir au mois 3 caracteres.")
     private String prenom;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    @Email(message = "Ce champ doit respecter le format email.")
     private String email;
+
+    @NotEmpty(message = "Ce champ ne doit pas est vide.")
+    @Size(min = 8, message = "Ce champ doit avoir au mois 8 caracteres.")
     private String password;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    @Size(min = 4, message = "Ce champ doit avoir au mois 4 caracteres.")
     private String ville;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    @Size(min = 10, message = "Ce champ doit avoir 10 caracteres.")
+    @Size(max = 10, message = "Ce champ doit avoir 10 caracteres.")
+    @Positive(message = "Ce champs doit etre positive.")
     private String tel;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    @PastOrPresent(message = "La date naissance doit être inférieur à date aujourd'hui.")
     private Date dateNaissance;
-    private Sexe sexe;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
+    private Gendre gendre;
+
+    @NotBlank(message = "Ce champ ne doit pas est vide.")
     private Roles role;
 
     private EmployeeRequest employee;
@@ -90,12 +120,12 @@ public class UtilisateurRequest {
         this.dateNaissance = dateNaissance;
     }
 
-    public Sexe getSexe() {
-        return sexe;
+    public Gendre getGendre() {
+        return gendre;
     }
 
-    public void setSexe(Sexe sexe) {
-        this.sexe = sexe;
+    public void setGendre(Gendre gendre) {
+        this.gendre = gendre;
     }
 
     public Roles getRole() {

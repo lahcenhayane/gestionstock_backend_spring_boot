@@ -2,7 +2,7 @@ package com.project.backend.Responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
-import com.project.backend.Utils.Sexe;
+import com.project.backend.Utils.Gendre;
 
 import java.util.Date;
 
@@ -18,7 +18,7 @@ public class UtilisateurResponse {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date dateNaissance;
     private Roles role;
-    private Sexe sexe;
+    private Gendre gendre;
     private Date supprimer;
 
     private EmployeeResponse employee;
@@ -90,12 +90,12 @@ public class UtilisateurResponse {
         this.dateNaissance = dateNaissance;
     }
 
-    public Sexe getSexe() {
-        return sexe;
+    public Gendre getGendre() {
+        return gendre;
     }
 
-    public void setSexe(Sexe sexe) {
-        this.sexe = sexe;
+    public void setGendre(Gendre gendre) {
+        this.gendre = gendre;
     }
 
     public Roles getRole() {
