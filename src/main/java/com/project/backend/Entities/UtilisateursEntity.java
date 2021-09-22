@@ -1,6 +1,8 @@
 package com.project.backend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
+import com.project.backend.Utils.Sexe;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -26,10 +28,13 @@ public class UtilisateursEntity {
     private String ville;
     @Column(length = 10)
     private String tel;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date dateNaissance;
     @Enumerated(EnumType.STRING)
+    private Sexe sexe;
+    @Enumerated(EnumType.STRING)
     private Roles role;
+
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     private List<MessagesEntity> messages;
@@ -55,7 +60,7 @@ public class UtilisateursEntity {
         this.dateModification = null;
     }
 
-    public UtilisateursEntity(String cin, String nom, String prenom, String email, String password, String ville, String tel, Date dateNaissance, Roles role) {
+    public UtilisateursEntity(String cin, String nom, String prenom, String email, String password, String ville, String tel, Date dateNaissance, Sexe sexe, Roles role) {
         this();
         this.cin = cin;
         this.nom = nom;
@@ -65,7 +70,9 @@ public class UtilisateursEntity {
         this.ville = ville;
         this.tel = tel;
         this.dateNaissance = dateNaissance;
+        this.sexe = sexe;
         this.role = role;
+
     }
 
     public long getId() {
@@ -134,6 +141,14 @@ public class UtilisateursEntity {
 
     public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
+    }
+
+    public Sexe getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(Sexe sexe) {
+        this.sexe = sexe;
     }
 
     public Roles getRole() {

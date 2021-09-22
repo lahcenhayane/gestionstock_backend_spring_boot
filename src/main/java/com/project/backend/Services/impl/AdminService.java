@@ -68,4 +68,16 @@ public class AdminService implements IAdminService {
         return new UtilisateurDtoPage(utilisateurDTOList, utilisateursEntity.getTotalPages(), utilisateursEntity.getTotalElements());
     }
 
+
+    /**
+     * Delete User By Id
+     * @param id
+     */
+    @Override
+    public void deleteUserById(long id) {
+        UtilisateursEntity utilisateursEntity = utilisateurRepository.findById(id).get();
+        if (utilisateursEntity == null) throw new UtilisateurException("User Not Found.");
+        utilisateurRepository.delete(utilisateursEntity);
+    }
+
 }

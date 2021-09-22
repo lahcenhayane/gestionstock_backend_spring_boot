@@ -70,6 +70,8 @@ public class UtilisateurService implements IUtilisateurService {
         UtilisateursEntity utilisateursEntity = utilisateurRepository.findByEmailAndCin(utilisateurDTO.getEmail(), utilisateurDTO.getCin());//Check User is exist or not.
         if (utilisateursEntity != null) throw new UtilisateurException("User Already Exist.");//Exception User "User Already exist".
 
+//        if (new Date().compareTo(utilisateurDTO.getDateNaissance()) == ) throw new UtilisateurException("Birthday not correct.");
+
         if (utilisateurDTO.getRole() == Roles.Employee)//Check If Role Equals Employee.
             utilisateurDTO.getEmployee().setUtilisateur(utilisateurDTO);//Add ID User To Employee.
         if (utilisateurDTO.getRole() == Roles.Client)//Check If Role Equals Client.

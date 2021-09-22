@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +47,13 @@ public class AdminController {
         return new ResponseEntity<>(pages, HttpStatus.OK);
     }
 
+
+    /**
+     * Find Users By Email.
+     * @param email
+     * @param page
+     * @return
+     */
     @GetMapping(value = "/search")
     public ResponseEntity<Page> findUserByEmail(@RequestParam(value = "email") String email,
                                                 @RequestParam(value = "page", defaultValue = "0") int page){
@@ -58,6 +62,14 @@ public class AdminController {
                 new UtilisateurResponsePage(mapDtoToResponse(utilisateurDtoPage.getList()), utilisateurDtoPage.getTotalPage(), utilisateurDtoPage.getTotalRow());
         Page pages = PageFactory.getPage(PageStateEnum.UtilisateurResponsePage, utilisateurResponsePage);
         return new ResponseEntity<>(pages, HttpStatus.OK);
+    }
+
+
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteUserById(@PathVariable long id){
+        adminService.deleteUserById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

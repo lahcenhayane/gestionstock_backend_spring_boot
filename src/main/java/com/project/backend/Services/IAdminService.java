@@ -13,4 +13,6 @@ public interface IAdminService {
     UtilisateurDtoPage getAllUser(int page, Roles role);
 
     UtilisateurDtoPage findUsersByEmail(String email, int page);
+
+    void deleteUserById(long id);
 }

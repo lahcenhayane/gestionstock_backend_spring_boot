@@ -1,6 +1,8 @@
 package com.project.backend.Requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
+import com.project.backend.Utils.Sexe;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -14,8 +16,9 @@ public class UtilisateurRequest {
     private String password;
     private String ville;
     private String tel;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date dateNaissance;
+    private Sexe sexe;
     private Roles role;
 
     private EmployeeRequest employee;
@@ -85,6 +88,14 @@ public class UtilisateurRequest {
 
     public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
+    }
+
+    public Sexe getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(Sexe sexe) {
+        this.sexe = sexe;
     }
 
     public Roles getRole() {

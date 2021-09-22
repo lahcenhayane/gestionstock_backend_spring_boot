@@ -1,6 +1,8 @@
 package com.project.backend.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
+import com.project.backend.Utils.Sexe;
 
 import java.util.Date;
 
@@ -14,8 +16,10 @@ public class UtilisateurDTO {
     private String password;
     private String ville;
     private String tel;
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private Date dateNaissance;
     private Roles role;
+    private Sexe sexe;
     private Date supprimer;
 
     private EmployeeDTO employee;
@@ -93,6 +97,14 @@ public class UtilisateurDTO {
 
     public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
+    }
+
+    public Sexe getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(Sexe sexe) {
+        this.sexe = sexe;
     }
 
     public Roles getRole() {
