@@ -75,11 +75,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .signWith(SignatureAlgorithm.HS512, JwtPropertiesConstant.SECRET_TOKEN)
                 .compact();
 
-
+        response.addHeader(JwtPropertiesConstant.HEADER_TOKEN, JwtPropertiesConstant.PREFIX_TOKEN+""+TOKEN);
         //Creating the ObjectMapper object
         ObjectMapper mapper = new ObjectMapper();
         //Converting the Object to JSONString
-        String jsonString = mapper.writeValueAsString(new Token_JWT(TOKEN, username, userDTO.getId(), id, userDTO.getRole()));
+        String jsonString = mapper.writeValueAsString(new Token_JWT(JwtPropertiesConstant.PREFIX_TOKEN+""+TOKEN, username, userDTO.getId(), id, userDTO.getRole()));
         response.getWriter().write(jsonString);
     }
 }

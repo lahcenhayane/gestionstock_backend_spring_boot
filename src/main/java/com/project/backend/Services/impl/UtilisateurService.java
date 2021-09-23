@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,11 +103,65 @@ public class UtilisateurService implements IUtilisateurService {
     }
 
     @Override
-    public UtilisateurDTO editUserById(long id, UtilisateurRequest request) {
+    public UtilisateurDTO editUserById(long id, UtilisateurDTO utilisateurDTO) {
         UtilisateursEntity utilisateursEntity = utilisateurRepository.findById(id).get();
         if (utilisateursEntity == null)throw new UtilisateurException("User not found.");
 
-        return null;
+        //Start: Admin Switch To Client or Employee
+        if (utilisateursEntity.getRole() == Roles.Admin && utilisateurDTO.getRole() == Roles.Client){
+            ClientsEntity client = new ClientsEntity();
+            client.setAdresse(utilisateurDTO.getClient().getAdresse());
+            client.setUtilisateur(utilisateursEntity);
+            utilisateursEntity.setClient(client);
+        }
+        if (utilisateursEntity.getRole() == Roles.Admin && utilisateurDTO.getRole() == Roles.Employee){
+            EmployeesEntity employee = new EmployeesEntity();
+            employee.setSalaire(utilisateurDTO.getEmployee().getSalaire());
+            employee.setUtilisateur(utilisateursEntity);
+            utilisateursEntity.setEmployee(employee);
+        }
+        //End: Admin Switch To Client or Employee
+        //Start: Client Switch To Admin or Employee
+        if (utilisateursEntity.getRole() == Roles.Client && utilisateurDTO.getRole() == Roles.Admin){
+            AdminsEntity admin = new AdminsEntity();
+            admin.setUtilisateur(utilisateursEntity);
+            utilisateursEntity.setAdmin(admin);
+        }
+        if (utilisateursEntity.getRole() == Roles.Client && utilisateurDTO.getRole() == Roles.Employee){
+
+            EmployeesEntity employee = new EmployeesEntity();
+            employee.setSalaire(utilisateurDTO.getEmployee().getSalaire());
+            employee.setUtilisateur(utilisateursEntity);
+            utilisateursEntity.setEmployee(employee);
+        }
+        //End: Client Switch To Admin or Employee
+        //Start: Employee Switch To Admin or Client
+        if (utilisateursEntity.getRole() == Roles.Employee && utilisateurDTO.getRole() == Roles.Admin){
+            AdminsEntity admin = new AdminsEntity();
+            admin.setUtilisateur(utilisateursEntity);
+            utilisateursEntity.setAdmin(admin);
+        }
+        if (utilisateursEntity.getRole() == Roles.Employee && utilisateurDTO.getRole() == Roles.Client){
+            ClientsEntity client = new ClientsEntity();
+            client.setAdresse(utilisateurDTO.getClient().getAdresse());
+            client.setUtilisateur(utilisateursEntity);
+            utilisateursEntity.setClient(client);
+        }
+        //End: Employee Switch To Admin or Client
+
+        utilisateursEntity.setCin(utilisateurDTO.getCin());
+        utilisateursEntity.setNom(utilisateurDTO.getNom());
+        utilisateursEntity.setPrenom(utilisateurDTO.getPrenom());
+        utilisateursEntity.setEmail(utilisateurDTO.getEmail());
+        utilisateursEntity.setVille(utilisateurDTO.getVille());
+        utilisateursEntity.setTel(utilisateurDTO.getTel());
+        utilisateursEntity.setRole(utilisateurDTO.getRole());
+        utilisateursEntity.setGendre(utilisateurDTO.getGendre());
+
+        UtilisateursEntity saveUser = utilisateurRepository.save(utilisateursEntity);
+
+        UtilisateurDTO dto = modelMapper.map(saveUser, UtilisateurDTO.class);
+        return dto;
     }
 
 }

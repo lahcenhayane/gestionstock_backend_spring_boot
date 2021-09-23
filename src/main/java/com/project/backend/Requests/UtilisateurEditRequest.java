@@ -3,12 +3,11 @@ package com.project.backend.Requests;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.Utils.Roles;
 import com.project.backend.Utils.Gendre;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.*;
 import java.util.Date;
 
-public class UtilisateurRequest {
+public class UtilisateurEditRequest {
 
     @NotBlank(message = "Ce champ ne doit pas est vide.")
     @Size(min = 6, message = "Ce champ doit avoir au mois 6 caracteres.")
@@ -26,9 +25,6 @@ public class UtilisateurRequest {
     @Email(message = "Ce champ doit respecter le format email.")
     private String email;
 
-    @NotNull(message = "Ce champ ne doit pas est vide.")
-    @Size(min = 8, message = "Ce champ doit avoir au mois 8 caracteres.")
-    private String password;
 
     @NotBlank(message = "Ce champ ne doit pas est vide.")
     @Size(min = 4, message = "Ce champ doit avoir au mois 4 caracteres.")
@@ -86,14 +82,6 @@ public class UtilisateurRequest {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getVille() {

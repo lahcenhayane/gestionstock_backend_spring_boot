@@ -4,6 +4,7 @@ import com.project.backend.Dto.UtilisateurDTO;
 import com.project.backend.Factory.DtoPage.UtilisateurDtoPage;
 import com.project.backend.Factory.Page;
 import com.project.backend.Factory.PageFactory;
+import com.project.backend.Requests.UtilisateurEditRequest;
 import com.project.backend.Requests.UtilisateurRequest;
 import com.project.backend.Responses.UtilisateurResponse;
 import com.project.backend.Services.IUtilisateurService;
@@ -33,21 +34,21 @@ public class UtilisateurController {
 
     /**
      * Create New User.
-     * @param utilisateurRequest
+     * @param request
      * @return utilisateurResponse
      */
     @PostMapping
-    public ResponseEntity<UtilisateurResponse> createNewUser(@RequestBody @Valid UtilisateurRequest utilisateurRequest){
-        UtilisateurDTO utilisateurDTO = modelMapper.map(utilisateurRequest, UtilisateurDTO.class);
+    public ResponseEntity<UtilisateurResponse> createNewUser(@RequestBody @Valid UtilisateurRequest request){
+        UtilisateurDTO utilisateurDTO = modelMapper.map(request, UtilisateurDTO.class);
         UtilisateurDTO userDTO = utilisateurService.createNewUser(utilisateurDTO);
         UtilisateurResponse utilisateurResponse = modelMapper.map(userDTO, UtilisateurResponse.class);
         return new ResponseEntity<>(utilisateurResponse, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<UtilisateurResponse> editUser(long id, @RequestBody UtilisateurRequest request){
+    @PutMapping("/{id}")
+    public ResponseEntity<UtilisateurResponse> editUser(@PathVariable long id, @Valid @RequestBody UtilisateurEditRequest request){
         UtilisateurDTO utilisateurDTO = modelMapper.map(request, UtilisateurDTO.class);
-        UtilisateurDTO userDto = utilisateurService.editUserById(id, request);
+        UtilisateurDTO userDto = utilisateurService.editUserById(id, utilisateurDTO);
         UtilisateurResponse response = modelMapper.map(userDto, UtilisateurResponse.class);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
