@@ -13,7 +13,7 @@ public class ProduitDTO {
     private int quantity;
     private String image;
 
-    private Set<CategorieDTO> categories = new HashSet<>();
+    private CategorieDTO categorie;
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -64,12 +64,12 @@ public class ProduitDTO {
         this.image = image;
     }
 
-    public Set<CategorieDTO> getCategories() {
-        return categories;
+    public CategorieDTO getCategorie() {
+        return categorie;
     }
 
-    public void setCategories(Set<CategorieDTO> categories) {
-        this.categories = categories;
+    public void setCategorie(CategorieDTO categorie) {
+        this.categorie = categorie;
     }
 
     public Boolean getNotification() {

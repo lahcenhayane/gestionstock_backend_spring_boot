@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategorieRepository  extends JpaRepository<CategoriesEntity, Long> {
-    CategoriesEntity getByLabelle(String labelle);
+    Page<CategoriesEntity> findByLabelleContains(String categorie, Pageable pageable);
 
-    Page<CategoriesEntity> findByLabelleContains(String search, Pageable pageable);
+    CategoriesEntity findByLabelle(String category_three);
 }

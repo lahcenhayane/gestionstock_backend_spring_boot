@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "categories")
@@ -15,12 +16,8 @@ public class CategoriesEntity {
     @Column(unique = true, length = 30)
     private String labelle;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "categories_produits",
-                joinColumns = { @JoinColumn(name = "categories_id") },
-                inverseJoinColumns = { @JoinColumn(name = "produits_id") }
-    )
-    private Set<ProduitsEntity> produits = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categorie")
+    private List<ProduitsEntity> produits;
 
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateCreation;
@@ -50,11 +47,11 @@ public class CategoriesEntity {
         this.labelle = labelle;
     }
 
-    public Set<ProduitsEntity> getProduits() {
+    public List<ProduitsEntity> getProduits() {
         return produits;
     }
 
-    public void setProduits(Set<ProduitsEntity> produits) {
+    public void setProduits(List<ProduitsEntity> produits) {
         this.produits = produits;
     }
 

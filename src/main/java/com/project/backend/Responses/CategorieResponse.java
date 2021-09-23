@@ -3,11 +3,13 @@ package com.project.backend.Responses;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class CategorieResponse {
 
     private long id;
     private String labelle;
+    private List<ProduitResponse> produits;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateCreation;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -28,6 +30,14 @@ public class CategorieResponse {
     public void setLabelle(String labelle) {
         this.labelle = labelle;
     }
+
+//    public List<ProduitResponse> getProduits() {
+//        return produits;
+//    }
+//
+//    public void setProduits(List<ProduitResponse> produits) {
+//        this.produits = produits;
+//    }
 
     public Date getDateCreation() {
         return dateCreation;

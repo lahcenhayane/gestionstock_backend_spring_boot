@@ -1,16 +1,12 @@
 package com.project.backend.Requests;
 
-import com.project.backend.Entities.CategoriesEntity;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class ProductRequest {
     private String nom;
     private Double prix;
     private int quantity;
 //    private String image;
-    private Set<CategorieRequest> categories = new HashSet<>();
+    private CategorieRequest categorie;
 
     public String getNom() {
         return nom;
@@ -36,11 +32,11 @@ public class ProductRequest {
         this.quantity = quantity;
     }
 
-    public Set<CategorieRequest> getCategories() {
-        return categories;
+    public CategorieRequest getCategorie() {
+        return categorie;
     }
 
-    public void setCategories(Set<CategorieRequest> categories) {
-        this.categories = categories;
+    public void setCategorie(CategorieRequest categorie) {
+        this.categorie = categorie;
     }
 }

@@ -17,8 +17,10 @@ public class ProduitsEntity {
     private int quantity;
     private String image;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "produits")
-    private Set<CategoriesEntity> categories = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "categorie_id")
+    private CategoriesEntity categorie;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "produits")
     private Set<CommandesEntity> commandes = new HashSet<>();
 
@@ -37,13 +39,13 @@ public class ProduitsEntity {
         this.dateModification = null;
     }
 
-    public ProduitsEntity(String nom, Double prix, int quantity, String image, Set<CategoriesEntity> categories) {
+    public ProduitsEntity(String nom, Double prix, int quantity, String image, CategoriesEntity categories) {
         this();
         this.nom = nom;
         this.prix = prix;
         this.quantity = quantity;
         this.image = image;
-        this.categories = categories;
+        this.categorie = categorie;
     }
 
     public long getId() {
@@ -82,12 +84,12 @@ public class ProduitsEntity {
         this.image = image;
     }
 
-    public Set<CategoriesEntity> getCategories() {
-        return categories;
+    public CategoriesEntity getCategorie() {
+        return categorie;
     }
 
-    public void setCategories(Set<CategoriesEntity> categories) {
-        this.categories = categories;
+    public void setCategorie(CategoriesEntity categorie) {
+        this.categorie = categorie;
     }
 
     public Set<CommandesEntity> getCommandes() {

@@ -1,9 +1,5 @@
 package com.project.backend.Responses;
 
-import com.project.backend.Entities.CategoriesEntity;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class ProduitResponse {
 
@@ -13,7 +9,7 @@ public class ProduitResponse {
     private int quantity;
 //    private String image;
 
-    private Set<CategorieResponse> categories = new HashSet<>();
+    private CategorieResponse categorie;
 
     public long getId() {
         return id;
@@ -47,11 +43,11 @@ public class ProduitResponse {
         this.quantity = quantity;
     }
 
-    public Set<CategorieResponse> getCategories() {
-        return categories;
+    public CategorieResponse getCategorie() {
+        return categorie;
     }
 
-    public void setCategories(Set<CategorieResponse> categories) {
-        this.categories = categories;
+    public void setCategorie(CategorieResponse categorie) {
+        this.categorie = categorie;
     }
 }

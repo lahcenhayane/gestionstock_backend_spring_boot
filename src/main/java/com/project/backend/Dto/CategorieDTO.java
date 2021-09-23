@@ -3,11 +3,13 @@ package com.project.backend.Dto;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class CategorieDTO {
 
     private long id;
     private String labelle;
+    private List<ProduitDTO> produits;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateCreation;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -27,6 +29,14 @@ public class CategorieDTO {
 
     public void setLabelle(String labelle) {
         this.labelle = labelle;
+    }
+
+    public List<ProduitDTO> getProduits() {
+        return produits;
+    }
+
+    public void setProduits(List<ProduitDTO> produits) {
+        this.produits = produits;
     }
 
     public Date getDateCreation() {
