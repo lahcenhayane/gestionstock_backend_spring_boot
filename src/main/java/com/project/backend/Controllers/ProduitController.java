@@ -8,6 +8,7 @@ import com.project.backend.Factory.PageFactory;
 import com.project.backend.Factory.PageStateEnum;
 import com.project.backend.Factory.ResponsePage.CategorieResponsePage;
 import com.project.backend.Factory.ResponsePage.ProductResponsePage;
+import com.project.backend.Requests.ProductRequest;
 import com.project.backend.Responses.CategorieResponse;
 import com.project.backend.Responses.ProduitResponse;
 import com.project.backend.Services.ICategoryService;
@@ -19,10 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,6 +55,30 @@ public class ProduitController {
         ProductResponsePage productResponsePage =
                 new ProductResponsePage(MapDtoToResponse(productDtoPage.getList()), productDtoPage.getTotalPage(), productDtoPage.getTotalRow());
         return new ResponseEntity<>(PageFactory.getPage(PageStateEnum.ProductResponsePage, productResponsePage), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<ProduitResponse> CreateNewProduct(@RequestBody ProductRequest request){
+        ProduitDTO produitDTO = modelMapper.map(request, ProduitDTO.class);
+        ProduitDTO dto = produitService.createNewProduct(produitDTO);
+        ProduitResponse produitResponse = modelMapper.map(dto, ProduitResponse.class);
+        return new ResponseEntity<>(produitResponse, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProductById(@PathVariable long id){
+        produitService.deleteProduct(id);
+        return new ResponseEntity<>("Delete Product.", HttpStatus.NO_CONTENT);
+    }
+
+
+    @PutMapping("/{id}")
+    private ResponseEntity<ProduitResponse> editProduct(@PathVariable long id, @RequestBody ProductRequest request){
+        ProduitDTO produitDTO = modelMapper.map(request, ProduitDTO.class);
+        ProduitDTO dto = produitService.editProduct(id, produitDTO);
+        ProduitResponse response = modelMapper.map(dto, ProduitResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
     List<ProduitResponse> MapDtoToResponse(List<ProduitDTO> list){

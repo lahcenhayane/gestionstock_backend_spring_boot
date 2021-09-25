@@ -1,8 +1,6 @@
 package com.project.backend.Factory;
 
-import com.project.backend.Factory.ResponsePage.CategorieResponsePage;
-import com.project.backend.Factory.ResponsePage.ProductResponsePage;
-import com.project.backend.Factory.ResponsePage.UtilisateurResponsePage;
+import com.project.backend.Factory.ResponsePage.*;
 import org.modelmapper.ModelMapper;
 
 
@@ -19,6 +17,12 @@ public class PageFactory {
             }
             case CategorieResponsePage:{
                 return new CategorieResponsePage(page.getList(), page.getTotalPage(), page.getTotalRow());
+            }
+            case CommandeResponsePage:{
+                return new CommandeResponsePage(page.getList(), page.getTotalPage(), page.getTotalRow());
+            }
+            case CommandeUsersResponsePage:{
+                return new CommandeUsersResponsePage(page.getList(), page.getTotalPage(), page.getTotalRow());
             }
             default:{
                 throw new RuntimeException("Type "+type+" is not correct.");

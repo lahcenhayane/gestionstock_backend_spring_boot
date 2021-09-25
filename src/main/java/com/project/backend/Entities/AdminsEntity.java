@@ -23,6 +23,9 @@ public class AdminsEntity {
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateModification;
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public AdminsEntity() {
         this.dateCreation = new Date();

@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CategorieRepository  extends JpaRepository<CategoriesEntity, Long> {
-    Page<CategoriesEntity> findByLabelleContains(String categorie, Pageable pageable);
+    List<CategoriesEntity> findByLabelleContains(String categorie);
 
-    CategoriesEntity findByLabelle(String category_three);
+    CategoriesEntity getByLabelle(String labelle);
 }

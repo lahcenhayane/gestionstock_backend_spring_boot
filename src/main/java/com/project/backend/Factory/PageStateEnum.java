@@ -5,5 +5,7 @@ public enum PageStateEnum {
     UtilisateurResponsePage,
     User,
     ProductResponsePage,
-    CategorieResponsePage
+    CategorieResponsePage,
+    CommandeResponsePage,
+    CommandeUsersResponsePage
 }

@@ -1,18 +1,29 @@
-package com.project.backend.Requests;
+package com.project.backend.Dto;
 
-
+import com.project.backend.Entities.AdminsEntity;
+import com.project.backend.Entities.ClientsEntity;
+import com.project.backend.Entities.EmployeesEntity;
+import com.project.backend.Entities.ProduitsEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ProductRequest {
+public class CommandeDTO {
+
     private long id;
-    private String nom;
-    private Double prix;
-    private int quantity;
-//    private String image;
-    private CategorieRequest categorie;
 
+    private Double prixTotal;
+
+    private EmployeeDTO employes;
+
+    private ClientDTO clients;
+
+    private AdminDTO admins;
+
+    private Set<ProduitDTO> produits = new HashSet<>();
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -30,38 +41,45 @@ public class ProductRequest {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public Double getPrixTotal() {
+        return prixTotal;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setPrixTotal(Double prixTotal) {
+        this.prixTotal = prixTotal;
     }
 
-    public Double getPrix() {
-        return prix;
+    public EmployeeDTO getEmployes() {
+        return employes;
     }
 
-    public void setPrix(Double prix) {
-        this.prix = prix;
+    public void setEmployes(EmployeeDTO employes) {
+        this.employes = employes;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public ClientDTO getClients() {
+        return clients;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setClients(ClientDTO clients) {
+        this.clients = clients;
     }
 
-    public CategorieRequest getCategorie() {
-        return categorie;
+    public AdminDTO getAdmins() {
+        return admins;
     }
 
-    public void setCategorie(CategorieRequest categorie) {
-        this.categorie = categorie;
+    public void setAdmins(AdminDTO admins) {
+        this.admins = admins;
     }
 
+    public Set<ProduitDTO> getProduits() {
+        return produits;
+    }
+
+    public void setProduits(Set<ProduitDTO> produits) {
+        this.produits = produits;
+    }
 
     public Boolean getNotification() {
         return notification;

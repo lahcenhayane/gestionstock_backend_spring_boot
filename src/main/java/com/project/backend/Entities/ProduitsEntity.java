@@ -17,7 +17,7 @@ public class ProduitsEntity {
     private int quantity;
     private String image;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "categorie_id")
     private CategoriesEntity categorie;
 
@@ -50,6 +50,10 @@ public class ProduitsEntity {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNom() {

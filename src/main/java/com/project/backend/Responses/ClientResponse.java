@@ -6,7 +6,15 @@ public class ClientResponse {
 
     private long id;
     private String adresse;
-//    private UtilisateurDTO utilisateur;
+    private UtilisateurResponse utilisateur;
+
+//    public UtilisateurResponse getUtilisateur() {
+//        return utilisateur;
+//    }
+//
+//    public void setUtilisateur(UtilisateurResponse utilisateur) {
+//        this.utilisateur = utilisateur;
+//    }
 
     public long getId() {
         return id;

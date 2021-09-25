@@ -4,16 +4,20 @@ import com.project.backend.Dto.CategorieDTO;
 import com.project.backend.Entities.CategoriesEntity;
 import com.project.backend.Exceptions.CategorieException;
 import com.project.backend.Factory.DtoPage.CategorieDtoPage;
+import com.project.backend.Factory.Page;
 import com.project.backend.Factory.PageFactory;
 import com.project.backend.Repositories.CategorieRepository;
 import com.project.backend.Services.ICategoryService;
 import com.project.backend.Utils.GlobalVariable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +29,17 @@ public class CategoryService implements ICategoryService {
     private final ModelMapper modelMapper = new ModelMapper();
     @Autowired
     private CategorieRepository categorieRepository;
+
+    @Override
+    public List<CategorieDTO> getCategoriesByName(String name) {
+        List<CategoriesEntity> categoriesEntity = null;
+        if (name == ""){
+            categoriesEntity = categorieRepository.findAll();
+        }else{
+            categoriesEntity = categorieRepository.findByLabelleContains(name);
+        }
+        return categoriesEntity.stream().map(row->modelMapper.map(row, CategorieDTO.class)).collect(Collectors.toList());
+    }
 
 
 //    /**

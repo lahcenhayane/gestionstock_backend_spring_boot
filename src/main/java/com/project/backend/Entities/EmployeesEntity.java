@@ -39,6 +39,10 @@ public class EmployeesEntity {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Double getSalaire() {
         return salaire;
     }

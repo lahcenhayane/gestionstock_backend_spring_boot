@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ICategoryService {
 
+    List<CategorieDTO> getCategoriesByName(String name);
 }
