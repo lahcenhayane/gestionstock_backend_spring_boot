@@ -9,22 +9,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CommandeDTO {
 
     private long id;
-
     private Double prixTotal;
-
     private EmployeeDTO employes;
-
     private ClientDTO clients;
-
     private AdminDTO admins;
-
-    private Set<ProduitDTO> produits = new HashSet<>();
-
+    private Set<CommandeProduitDTO> commandeProduit;
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date supprimer;
@@ -73,12 +68,12 @@ public class CommandeDTO {
         this.admins = admins;
     }
 
-    public Set<ProduitDTO> getProduits() {
-        return produits;
+    public Set<CommandeProduitDTO> getCommandeProduit() {
+        return commandeProduit;
     }
 
-    public void setProduits(Set<ProduitDTO> produits) {
-        this.produits = produits;
+    public void setCommandeProduit(Set<CommandeProduitDTO> commandeProduit) {
+        this.commandeProduit = commandeProduit;
     }
 
     public Boolean getNotification() {

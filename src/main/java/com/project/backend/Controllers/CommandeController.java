@@ -2,6 +2,7 @@ package com.project.backend.Controllers;
 
 
 import com.project.backend.Dto.CommandeDTO;
+import com.project.backend.Dto.CommandeProduitDTO;
 import com.project.backend.Factory.DtoPage.CommandeDtoPage;
 import com.project.backend.Factory.Page;
 import com.project.backend.Factory.PageFactory;
@@ -18,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,9 +32,16 @@ public class CommandeController {
     @Autowired
     private ICommandeService commandeService;
 
+
+    @GetMapping("/count")
+    public long getCountOrders(){
+        return commandeService.getCountOrders();
+    }
+
     @GetMapping
-    public ResponseEntity<Page> getAllOrders(@RequestParam(value = "page", defaultValue = "0") int page){
-        CommandeDtoPage commandeDtoPage = commandeService.getAllOrders(page);
+    public ResponseEntity<Page> getAllOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                             @RequestParam(value = "id", defaultValue = "0") long id){
+        CommandeDtoPage commandeDtoPage = commandeService.getAllOrders(page, id);
         CommandeUsersResponsePage commandeResponsePage =
                 new CommandeUsersResponsePage(MapDtoToResponse(commandeDtoPage.getList()), commandeDtoPage.getTotalPage(), commandeDtoPage.getTotalRow());
         return new ResponseEntity<>(PageFactory.getPage(PageStateEnum.CommandeUsersResponsePage, commandeResponsePage), HttpStatus.OK);
@@ -39,11 +49,18 @@ public class CommandeController {
 
 
     @PostMapping
-    public ResponseEntity<CommandeResponse> createNewOrders(@RequestBody CommandeRequest request){
+    public ResponseEntity<CommandeResponse> createNewOrders(@RequestBody CommandeRequest request, Principal principal){
         CommandeDTO commandeDTO = modelMapper.map(request, CommandeDTO.class);
-        CommandeDTO Dto = commandeService.createNewOrider(commandeDTO);
-        return new ResponseEntity<>(modelMapper.map(Dto, CommandeResponse.class), HttpStatus.CREATED);
+        Set<CommandeProduitDTO> list = request.getProduits().stream().map(row->modelMapper.map(row, CommandeProduitDTO.class )).collect(Collectors.toSet());
+        commandeDTO.setCommandeProduit(list);
+        CommandeDTO Dto = commandeService.createNewOrider(commandeDTO, principal);
+
+        CommandeResponse commandeResponse = modelMapper.map(Dto, CommandeResponse.class);
+        commandeResponse.getProduits().stream().map(row->modelMapper.map(row, CommandeResponse.class));
+        return new ResponseEntity<>(commandeResponse, HttpStatus.CREATED);
     }
+
+
 
 
     List<CommandeUsersResponse> MapDtoToResponse(List<CommandeDTO> list){

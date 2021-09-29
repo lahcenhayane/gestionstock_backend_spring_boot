@@ -26,6 +26,12 @@ public class UtilisateurController {
     @Autowired
     private IUtilisateurService utilisateurService;
 
+    @GetMapping("/count")
+    public long getCountUsers(){
+        return utilisateurService.getCountUsers();
+    }
+
+
 //    @GetMapping
 //    public ResponseEntity<Page<UtilisateurDtoPage>> getAllUser(){
 //        Page<UtilisateurDtoPage> page = PageFactory.getPage("UtilisateurDtoPage");

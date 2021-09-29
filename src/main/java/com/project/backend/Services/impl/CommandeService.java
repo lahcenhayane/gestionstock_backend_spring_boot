@@ -1,6 +1,7 @@
 package com.project.backend.Services.impl;
 
 import com.project.backend.Dto.CommandeDTO;
+import com.project.backend.Dto.ProduitDTO;
 import com.project.backend.Entities.*;
 import com.project.backend.Exceptions.UtilisateurException;
 import com.project.backend.Factory.DtoPage.CommandeDtoPage;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,13 +40,21 @@ public class CommandeService implements ICommandeService {
     private ClientRepository clientRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private CommandeProduitRepository commandeProduitRepository;
 
 
     @Override
-    public CommandeDtoPage getAllOrders(int page) {
+    public CommandeDtoPage getAllOrders(int page, long id) {
         if (page>0) page--;
         Pageable pageable = PageRequest.of(page, GlobalVariable.SIZE);
-        Page<CommandesEntity> commandesEntityPage = commandesEntityPage = commandeRepository.findAll(pageable);
+        Page<CommandesEntity> commandesEntityPage = null;
+        if (id == 0){
+            commandesEntityPage = commandeRepository.findAll(pageable);
+        }else{
+            commandesEntityPage = commandeRepository.findByIdContians(pageable, id);
+        }
+
         List<CommandeDTO> commandeDTOs = commandesEntityPage.stream().map(row->modelMapper.map(row, CommandeDTO.class)).collect(Collectors.toList());
 
         return new CommandeDtoPage(commandeDTOs, commandesEntityPage.getTotalPages(), commandesEntityPage.getTotalElements());
@@ -52,36 +62,37 @@ public class CommandeService implements ICommandeService {
 
     @Transactional
     @Override
-    public CommandeDTO createNewOrider(CommandeDTO commandeDTO) {
-
+    public CommandeDTO createNewOrider(CommandeDTO commandeDTO, Principal principal) {
         CommandesEntity commandesEntity = modelMapper.map(commandeDTO, CommandesEntity.class);
+        if (commandesEntity.getClients() != null){commandesEntity.setClients(clientRepository.findById(commandesEntity.getClients().getId()).get());}
 
-        if (commandesEntity.getAdmins() != null){
-            AdminsEntity admin = adminRepository.findById(commandesEntity.getAdmins().getId()).get();
-            if (admin == null) throw new UtilisateurException("Client Not Found.");
-            commandesEntity.setAdmins(admin);
-        }
+        UtilisateursEntity utilisateurs = utilisateurRepository.findByEmail(principal.getName());
+        if (utilisateurs.getRole() == Roles.Admin) commandesEntity.setAdmins(utilisateurs.getAdmin());
+        if (utilisateurs.getRole() == Roles.Employee) commandesEntity.setEmployes(utilisateurs.getEmployee());
+        if (commandesEntity.getEmployes() != null) commandesEntity.setEmployes(employeeRepository.findById(commandesEntity.getEmployes().getId()).get());
 
-        ClientsEntity client = null;
-        if (commandesEntity.getClients() != null){
-            client = clientRepository.findById(commandesEntity.getClients().getId()).get();
-            if (client == null) throw new UtilisateurException("Client Not Found.");
-            commandesEntity.setClients(client);
-        }
-        EmployeesEntity employee = null;
-        if (commandesEntity.getEmployes() != null){
-            employee = employeeRepository.findById(commandesEntity.getEmployes().getId()).get();
-            if (employee == null) throw new UtilisateurException("Client Not Found.");
-            commandesEntity.setEmployes(employee);
-        }
+        CommandesEntity saveOrder = commandeRepository.save(commandesEntity);
 
-        Set<ProduitsEntity> produitsEntitySet = commandesEntity.getProduits().stream()
-                .map(product->productRepository.findById(product.getId()).get()).collect(Collectors.toSet());
-        commandesEntity.setProduits(produitsEntitySet);
+        commandesEntity.getCommandeProduit().stream().forEach(
+            row->{
+                CommandeProduitEntity commandeProduitEntity = new CommandeProduitEntity();
+                commandeProduitEntity.setCommandes(saveOrder);
+                ProduitsEntity produit = productRepository.findById(row.getProduits().getId()).get();
+                if (produit == null) throw new RuntimeException("Product Not Found.");
+                commandeProduitEntity.setProduits(produit);
+                commandeProduitEntity.setQuantute(row.getQuantute());
+                commandeProduitRepository.save(commandeProduitEntity);
+            }
+        );
 
-
-        CommandesEntity saveCommande = commandeRepository.save(commandesEntity);
-        CommandeDTO dto = modelMapper.map(saveCommande, CommandeDTO.class);
+        CommandeDTO dto =modelMapper.map(commandesEntity, CommandeDTO.class);
+        dto.getCommandeProduit().stream().forEach(row->row.setProduits(productRepository.findById(row.getProduits().getId()).get()));
         return dto;
     }
+
+    @Override
+    public long getCountOrders() {
+        return commandeRepository.count();
+    }
+
 }

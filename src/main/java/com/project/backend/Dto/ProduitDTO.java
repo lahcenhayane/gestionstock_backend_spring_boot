@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ProduitDTO {
@@ -12,7 +13,7 @@ public class ProduitDTO {
     private Double prix;
     private int quantity;
     private String image;
-
+    private Set<CommandeProduitDTO> commandeProduit;
     private CategorieDTO categorie;
 
     private Boolean notification;
@@ -62,6 +63,14 @@ public class ProduitDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Set<CommandeProduitDTO> getCommandeProduit() {
+        return commandeProduit;
+    }
+
+    public void setCommandeProduit(Set<CommandeProduitDTO> commandeProduit) {
+        this.commandeProduit = commandeProduit;
     }
 
     public CategorieDTO getCategorie() {

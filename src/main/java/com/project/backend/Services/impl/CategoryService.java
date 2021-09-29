@@ -41,6 +41,11 @@ public class CategoryService implements ICategoryService {
         return categoriesEntity.stream().map(row->modelMapper.map(row, CategorieDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public long getCountCategory() {
+        return categorieRepository.count();
+    }
+
 
 //    /**
 //     * Get All Categories

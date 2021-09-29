@@ -86,6 +86,11 @@ public class ProduitService implements IProduitService {
         return dto;
     }
 
+    @Override
+    public long getCountProducts() {
+        return productRepository.count();
+    }
+
 
     @Override
     public ProductDtoPage getProductByName(String name, int page) {

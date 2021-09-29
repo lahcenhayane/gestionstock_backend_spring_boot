@@ -13,7 +13,9 @@ public class CommandeRequest {
 
     private AdminRequest admins;
 
-    private Set<ProductRequest> produits = new HashSet<>();
+    private Set<CommandeProduitRequest> produits = new HashSet<>();
+
+
 
     public Double getPrixTotal() {
         return prixTotal;
@@ -47,11 +49,11 @@ public class CommandeRequest {
         this.admins = admins;
     }
 
-    public Set<ProductRequest> getProduits() {
+    public Set<CommandeProduitRequest> getProduits() {
         return produits;
     }
 
-    public void setProduits(Set<ProductRequest> produits) {
+    public void setProduits(Set<CommandeProduitRequest> produits) {
         this.produits = produits;
     }
 }

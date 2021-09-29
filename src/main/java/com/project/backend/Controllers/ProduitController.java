@@ -36,6 +36,12 @@ public class ProduitController {
     private ICategoryService categoryService;
 
 
+    @GetMapping("/count")
+    public long getCountProducts(){
+        return produitService.getCountProducts();
+    }
+
+
     @GetMapping
     public ResponseEntity<Page> getAllProductByCategory(@RequestParam(value = "page", defaultValue = "0") int page,
                                                         @RequestParam(value = "categorie", defaultValue = "") String categorie,

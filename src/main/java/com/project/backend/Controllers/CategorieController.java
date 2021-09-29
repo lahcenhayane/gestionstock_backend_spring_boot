@@ -33,6 +33,10 @@ public class CategorieController {
         return new ResponseEntity<>(categorieResponseList, HttpStatus.OK);
     }
 
+    @GetMapping("/count")
+    public long getCountCategory(){
+        return categorieService.getCountCategory();
+    }
 
 
 }

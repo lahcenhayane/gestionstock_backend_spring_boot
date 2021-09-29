@@ -14,4 +14,7 @@ public interface CommandeRepository extends JpaRepository<CommandesEntity, Long>
     @Query(value = "SELECT * FROM commandes cmd, clients cl, utilisateurs u WHERE  cmd.clients_id = cl.id AND cl.utilisateurs_id = u.id AND u.prenom LIKE %:search% OR u.nom LIKE %:search%",
            nativeQuery = true)
     Page<CommandesEntity> findByClient(Pageable pageable, @Param("search") String search);
+    @Query(value = "SELECT * FROM commandes cmd WHERE  cmd.id LIKE %:id%",
+            nativeQuery = true)
+    Page<CommandesEntity> findByIdContians(Pageable pageable, @Param("id") long id);
 }

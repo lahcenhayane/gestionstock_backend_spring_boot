@@ -22,7 +22,7 @@ public class CommandeResponse {
 
     private AdminResponse admins;
 
-    private Set<ProduitResponse> produits = new HashSet<>();
+    private Set<CommandeProduitResponse> produits;
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -72,11 +72,11 @@ public class CommandeResponse {
         this.admins = admins;
     }
 
-    public Set<ProduitResponse> getProduits() {
+    public Set<CommandeProduitResponse> getProduits() {
         return produits;
     }
 
-    public void setProduits(Set<ProduitResponse> produits) {
+    public void setProduits(Set<CommandeProduitResponse> produits) {
         this.produits = produits;
     }
 

@@ -18,4 +18,6 @@ public interface IProduitService {
 
 
     ProduitDTO editProduct(long id, ProduitDTO produitDTO);
+
+    long getCountProducts();
 }

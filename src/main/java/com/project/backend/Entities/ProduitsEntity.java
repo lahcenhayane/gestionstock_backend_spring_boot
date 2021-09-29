@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "produits")
@@ -21,8 +22,8 @@ public class ProduitsEntity {
     @JoinColumn(name = "categorie_id")
     private CategoriesEntity categorie;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "produits")
-    private Set<CommandesEntity> commandes = new HashSet<>();
+    @OneToMany(mappedBy = "produits")
+    private Set<CommandeProduitEntity> commandeProduit;
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -32,21 +33,12 @@ public class ProduitsEntity {
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateModification;
 
+
     public ProduitsEntity() {
-        this.notification = true;
-        this.supprimer = null;
         this.dateCreation = new Date();
-        this.dateModification = null;
+        this.dateModification = new Date();
     }
 
-    public ProduitsEntity(String nom, Double prix, int quantity, String image, CategoriesEntity categories) {
-        this();
-        this.nom = nom;
-        this.prix = prix;
-        this.quantity = quantity;
-        this.image = image;
-        this.categorie = categorie;
-    }
 
     public long getId() {
         return id;
@@ -96,12 +88,12 @@ public class ProduitsEntity {
         this.categorie = categorie;
     }
 
-    public Set<CommandesEntity> getCommandes() {
-        return commandes;
+    public Set<CommandeProduitEntity> getCommandeProduit() {
+        return commandeProduit;
     }
 
-    public void setCommandes(Set<CommandesEntity> commandes) {
-        this.commandes = commandes;
+    public void setCommandeProduit(Set<CommandeProduitEntity> commandeProduit) {
+        this.commandeProduit = commandeProduit;
     }
 
     public Boolean getNotification() {
@@ -122,6 +114,10 @@ public class ProduitsEntity {
 
     public Date getDateCreation() {
         return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     public Date getDateModification() {

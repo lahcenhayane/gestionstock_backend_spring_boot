@@ -164,4 +164,10 @@ public class UtilisateurService implements IUtilisateurService {
         return dto;
     }
 
+    @Override
+    public long getCountUsers() {
+        long count = utilisateurRepository.count();
+        return count;
+    }
+
 }

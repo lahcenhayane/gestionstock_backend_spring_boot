@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.xml.crypto.Data;
@@ -27,4 +28,14 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateursEntity,
 
 
     Page<UtilisateursEntity> findByRole(Pageable pageable, Roles role);
+
+    List<UtilisateursEntity> findByRole(Roles role);
+
+    List<UtilisateursEntity> findByRoleAndCinContains(Roles client, String search);
+
+    @Query(
+            value = "SELECT * FROM utilisateurs u WHERE u.role = 'Client' ORDER BY date_creation DESC Limit 0, 5"
+            ,nativeQuery = true
+    )
+    List<UtilisateursEntity> getUserGroupByOrder();
 }

@@ -14,4 +14,6 @@ public interface IUtilisateurService extends UserDetailsService {
     UtilisateurDTO createNewUser(UtilisateurDTO utilisateurDTO);
 
     UtilisateurDTO editUserById(long id, UtilisateurDTO utilisateurDTO);
+
+    long getCountUsers();
 }

@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "commandes")
@@ -16,20 +16,19 @@ public class CommandesEntity {
     private Double prixTotal;
 
     @ManyToOne
-    @JoinColumn(name = "employes_id", nullable = false)
+    @JoinColumn(name = "employes_id")
     private EmployeesEntity employes;
     @ManyToOne
-    @JoinColumn(name = "clients_id")
+    @JoinColumn(name = "clients_id", nullable = false)
     private ClientsEntity clients;
     @ManyToOne
     @JoinColumn(name = "admins_id")
     private AdminsEntity admins;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "commandes_produits",
-                joinColumns = { @JoinColumn(name = "commandes_id") },
-                inverseJoinColumns = { @JoinColumn(name = "produits_id") }
-    )
-    private Set<ProduitsEntity> produits = new HashSet<>();
+
+    @OneToMany(mappedBy = "commandes")
+    private Set<CommandeProduitEntity> commandeProduit;
+
+
 
     private Boolean notification;
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
@@ -39,27 +38,8 @@ public class CommandesEntity {
     @DateTimeFormat(pattern = "dd-mm-yyyy hh:mm:ss")
     private Date dateModification;
 
-    public CommandesEntity(){
-        this.notification = true;
-        this.supprimer = null;
-        this.dateCreation = new Date();
-        this.dateModification = null;
-    }
 
-    public CommandesEntity(Double prixTotal, EmployeesEntity employes, ClientsEntity clients, Set<ProduitsEntity> produits) {
-        this();
-        this.prixTotal = prixTotal;
-        this.employes = employes;
-        this.clients = clients;
-        this.produits = produits;
-    }
-
-    public CommandesEntity(Double prixTotal, EmployeesEntity employes, AdminsEntity admins, Set<ProduitsEntity> produits) {
-        this();
-        this.prixTotal = prixTotal;
-        this.employes = employes;
-        this.admins = admins;
-        this.produits = produits;
+    public CommandesEntity() {
     }
 
     public long getId() {
@@ -102,12 +82,12 @@ public class CommandesEntity {
         this.admins = admins;
     }
 
-    public Set<ProduitsEntity> getProduits() {
-        return produits;
+    public Set<CommandeProduitEntity> getCommandeProduit() {
+        return commandeProduit;
     }
 
-    public void setProduits(Set<ProduitsEntity> produits) {
-        this.produits = produits;
+    public void setCommandeProduit(Set<CommandeProduitEntity> commandeProduit) {
+        this.commandeProduit = commandeProduit;
     }
 
     public Boolean getNotification() {
@@ -128,6 +108,10 @@ public class CommandesEntity {
 
     public Date getDateCreation() {
         return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     public Date getDateModification() {
