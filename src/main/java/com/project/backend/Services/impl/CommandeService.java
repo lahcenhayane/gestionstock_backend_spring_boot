@@ -65,14 +65,11 @@ public class CommandeService implements ICommandeService {
     public CommandeDTO createNewOrider(CommandeDTO commandeDTO, Principal principal) {
         CommandesEntity commandesEntity = modelMapper.map(commandeDTO, CommandesEntity.class);
         if (commandesEntity.getClients() != null){commandesEntity.setClients(clientRepository.findById(commandesEntity.getClients().getId()).get());}
-
         UtilisateursEntity utilisateurs = utilisateurRepository.findByEmail(principal.getName());
         if (utilisateurs.getRole() == Roles.Admin) commandesEntity.setAdmins(utilisateurs.getAdmin());
         if (utilisateurs.getRole() == Roles.Employee) commandesEntity.setEmployes(utilisateurs.getEmployee());
         if (commandesEntity.getEmployes() != null) commandesEntity.setEmployes(employeeRepository.findById(commandesEntity.getEmployes().getId()).get());
-
         CommandesEntity saveOrder = commandeRepository.save(commandesEntity);
-
         commandesEntity.getCommandeProduit().stream().forEach(
             row->{
                 CommandeProduitEntity commandeProduitEntity = new CommandeProduitEntity();
@@ -84,7 +81,6 @@ public class CommandeService implements ICommandeService {
                 commandeProduitRepository.save(commandeProduitEntity);
             }
         );
-
         CommandeDTO dto =modelMapper.map(commandesEntity, CommandeDTO.class);
         dto.getCommandeProduit().stream().forEach(row->row.setProduits(productRepository.findById(row.getProduits().getId()).get()));
         return dto;
@@ -94,5 +90,7 @@ public class CommandeService implements ICommandeService {
     public long getCountOrders() {
         return commandeRepository.count();
     }
+
+
 
 }

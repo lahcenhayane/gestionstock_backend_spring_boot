@@ -14,4 +14,6 @@ public interface CategorieRepository  extends JpaRepository<CategoriesEntity, Lo
     List<CategoriesEntity> findByLabelleContains(String categorie);
 
     CategoriesEntity getByLabelle(String labelle);
+
+    CategoriesEntity findByLabelle(String labelle);
 }

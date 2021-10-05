@@ -1,6 +1,7 @@
 package com.project.backend.Controllers;
 
 import com.project.backend.Dto.CategorieDTO;
+import com.project.backend.Entities.CategoriesEntity;
 import com.project.backend.Factory.Page;
 import com.project.backend.Requests.CategorieRequest;
 import com.project.backend.Responses.CategorieResponse;
@@ -32,6 +33,32 @@ public class CategorieController {
                              .collect(Collectors.toList());
         return new ResponseEntity<>(categorieResponseList, HttpStatus.OK);
     }
+
+
+    @PostMapping
+    public ResponseEntity<CategorieResponse> createNewCategory(@RequestBody CategorieRequest request){
+        CategorieDTO categorieDTO = modelMapper.map(request, CategorieDTO.class);
+        CategorieDTO category = categorieService.createNewCategory(categorieDTO);
+        CategorieResponse response = modelMapper.map(category, CategorieResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable long id){
+        categorieService.deleteCategory(id);
+        return new ResponseEntity<>("Delete Category", HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategorieResponse> editCategory(@PathVariable long id, @RequestBody CategorieRequest request){
+        CategorieDTO categorieDTO = modelMapper.map(request, CategorieDTO.class);
+        CategorieDTO editCategory = categorieService.editCategory(id, categorieDTO);
+        CategorieResponse response = modelMapper.map(editCategory, CategorieResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
+
 
     @GetMapping("/count")
     public long getCountCategory(){

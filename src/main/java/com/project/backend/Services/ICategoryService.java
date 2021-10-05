@@ -11,4 +11,12 @@ public interface ICategoryService {
     List<CategorieDTO> getCategoriesByName(String name);
 
     long getCountCategory();
+
+    CategorieDTO createNewCategory(CategorieDTO categorieDTO);
+
+    void deleteCategory(long id);
+
+    CategorieDTO editCategory(long id, CategorieDTO categorieDTO);
+
+
 }

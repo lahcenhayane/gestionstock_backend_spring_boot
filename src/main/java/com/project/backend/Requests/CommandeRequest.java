@@ -6,16 +6,10 @@ import java.util.Set;
 public class CommandeRequest {
 
     private Double prixTotal;
-
     private EmployeeRequest employes;
-
     private ClientRequest clients;
-
     private AdminRequest admins;
-
     private Set<CommandeProduitRequest> produits = new HashSet<>();
-
-
 
     public Double getPrixTotal() {
         return prixTotal;

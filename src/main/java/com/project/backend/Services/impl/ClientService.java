@@ -1,7 +1,10 @@
 package com.project.backend.Services.impl;
 
+import com.project.backend.Dto.ClientDTO;
 import com.project.backend.Dto.UtilisateurDTO;
+import com.project.backend.Entities.ClientsEntity;
 import com.project.backend.Entities.UtilisateursEntity;
+import com.project.backend.Repositories.ClientRepository;
 import com.project.backend.Repositories.UtilisateurRepository;
 import com.project.backend.Responses.UtilisateurResponse;
 import com.project.backend.Services.IClientService;
@@ -21,7 +24,8 @@ public class ClientService implements IClientService {
     private ModelMapper modelMapper = new ModelMapper();
     @Autowired
     private UtilisateurRepository utilisateurRepository;
-
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public List<UtilisateurDTO> getAllClients(String search) {
@@ -35,5 +39,11 @@ public class ClientService implements IClientService {
         List<UtilisateursEntity> list = utilisateurRepository.getUserGroupByOrder();
         return list.stream().map(row->modelMapper.map(row, UtilisateurDTO.class)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public long getCountCmdByClient(long id) {
+        long countClient = clientRepository.findById(id).get().getCommandes().stream().count();
+        return countClient;
     }
 }

@@ -9,6 +9,8 @@ import com.project.backend.Factory.PageFactory;
 import com.project.backend.Factory.PageStateEnum;
 import com.project.backend.Factory.ResponsePage.CommandeResponsePage;
 import com.project.backend.Factory.ResponsePage.CommandeUsersResponsePage;
+import com.project.backend.Repositories.CommandeProduitRepository;
+import com.project.backend.Repositories.CommandeRepository;
 import com.project.backend.Requests.CommandeRequest;
 import com.project.backend.Responses.CmdOrders.CommandeUsersResponse;
 import com.project.backend.Responses.CommandeResponse;
@@ -31,6 +33,8 @@ public class CommandeController {
 
     @Autowired
     private ICommandeService commandeService;
+    @Autowired
+    private CommandeRepository commandeRepository;
 
 
     @GetMapping("/count")
@@ -60,8 +64,10 @@ public class CommandeController {
         return new ResponseEntity<>(commandeResponse, HttpStatus.CREATED);
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public void deleteOrder(@PathVariable long id){
+        commandeRepository.delete(commandeRepository.findById(id).get());
+    }
 
     List<CommandeUsersResponse> MapDtoToResponse(List<CommandeDTO> list){
         return list.stream().map(row->modelMapper.map(row, CommandeUsersResponse.class)).collect(Collectors.toList());

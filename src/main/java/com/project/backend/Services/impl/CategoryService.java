@@ -46,6 +46,37 @@ public class CategoryService implements ICategoryService {
         return categorieRepository.count();
     }
 
+    @Override
+    public CategorieDTO createNewCategory(CategorieDTO categorieDTO) {
+        CategoriesEntity category = categorieRepository.findByLabelle(categorieDTO.getLabelle());
+        if (category != null) throw new RuntimeException("This Category Already Exist.");
+        CategoriesEntity categoriesEntity = modelMapper.map(categorieDTO, CategoriesEntity.class);
+        CategoriesEntity saveCategory = categorieRepository.save(categoriesEntity);
+        return modelMapper.map(saveCategory, CategorieDTO.class);
+    }
+
+    @Override
+    public void deleteCategory(long id) {
+        CategoriesEntity category = categorieRepository.findById(id).get();
+        if (category == null) throw new RuntimeException("Category Not Founs.");
+        categorieRepository.delete(category);
+    }
+
+    @Override
+    public CategorieDTO editCategory(long id, CategorieDTO categoriy) {
+        CategoriesEntity categoriesEntity = categorieRepository.findById(id).get();
+        if (categoriesEntity == null)throw new RuntimeException("Category Not Found.");
+
+        categoriesEntity.setLabelle(categoriy.getLabelle());
+        categoriesEntity.setDateModification(new Date());
+
+        CategoriesEntity editCategory = categorieRepository.save(categoriesEntity);
+
+        CategorieDTO dto = modelMapper.map(editCategory, CategorieDTO.class);
+        return dto;
+    }
+
+
 
 //    /**
 //     * Get All Categories

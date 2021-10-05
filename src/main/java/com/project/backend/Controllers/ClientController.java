@@ -9,10 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +34,12 @@ public class ClientController {
         List<UtilisateurDTO> utilisateurDTOList = clientService.getUserGroupByOrder();
         List<UtilisateurResponse> list = utilisateurDTOList.stream().map(row->modelMapper.map(row, UtilisateurResponse.class)).collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/countcmd/{id}")
+    public ResponseEntity<Long> getCountCmdByClient(@PathVariable long id){
+        long count = clientService.getCountCmdByClient(id);
+        return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
 }
